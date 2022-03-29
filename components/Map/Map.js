@@ -32,29 +32,34 @@ const Map = ({ children, className, ...rest }) => {
   }, []);
 
   return (
-    <MapContainer
-      className={mapClassName}
-      {...rest}
-      CRS={CRS.Simple}
-      bounds={[
-        [0, 0],
-        [8192, 8192],
-      ]}
-      fitBounds={[
-        [0, 0],
-        [8192, 8192],
-      ]}
-    >
+    <MapContainer className={mapClassName} {...rest} CRS={CRS.Simple}>
       <MapConsumer>
         {(map) => {
-          const marker = map.on("click", function (e) {
-            const { lat, lng } = e.latlng;
-            L.marker([lat, lng], { Icon }).addTo(map);
+          const [clickCount, setClickCount] = useState(0);
+          const [markerStore, setMarkerStore] = useState();
+          ReactLeaflet.useMapEvents({
+            click: (e) => {
+              const { lat, lng } = e.latlng;
+              if (clickCount === 0) {
+                setClickCount(clickCount + 1);
+                markerStore ? map.removeLayer(markerStore) : null;
+                setMarkerStore(L.marker([lat, lng], { Icon }).addTo(map));
+              } else if (clickCount === 1) {
+                setClickCount(clickCount - 1);
+                map.removeLayer(markerStore);
+                setMarkerStore(L.marker([lat, lng], { Icon }).addTo(map));
+              }
+              console.log(e);
+              console.log(clickCount);
+            },
+            keypress: (e) => {
+              console.log(map);
+            },
           });
-          console.log("map.on", marker);
+
           const rc = new rastercoords(map, [11011, 11716]);
           map.setMaxZoom(rc.zoomLevel());
-          map.setView(rc.unproject([11011, 11716]), 2);
+          // map.setView(rc.unproject([11011, 11716]), 2);
           return children(ReactLeaflet, map, rc);
         }}
       </MapConsumer>
