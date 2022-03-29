@@ -1,14 +1,13 @@
 import Head from "next/head";
 import { useEffect } from "react";
+import Image from "next/image";
+import { useRef } from "react";
 
 import Map from "../components/Map";
 
 import styles from "../styles/Home.module.css";
-import Image from "next/image";
 import locations from "../db/location";
 import randomInteger from "random-int";
-
-const DEFAULT_CENTER = [38.907132, -77.036546];
 
 const MapEffect = ({ useMap }) => {
   const map = useMap();
@@ -21,10 +20,15 @@ const MapEffect = ({ useMap }) => {
 };
 
 export default function Home() {
+  const myRef = useRef(null);
+  const executeScroll = () => myRef.current.scrollIntoView();
+
   return (
     <div className={styles.relativeBox}>
-      <button className={styles.submitBtn}>Top</button>
-      <button className={styles.topBtn}>Submit</button>
+      <button className={styles.topBtn} onClick={executeScroll}>
+        Top
+      </button>
+      <button className={styles.submitBtn}>Submit</button>
       <button className={styles.bottomBtn}>Bottom</button>
 
       <Head>
@@ -37,6 +41,7 @@ export default function Home() {
         width="2160"
         height="1215"
         className={styles.overlay}
+        ref={myRef}
       />
 
       <Map
