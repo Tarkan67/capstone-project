@@ -114,3 +114,36 @@
     flex-direction: column;
   }
 }
+
+.homeMap {
+  height: 100vh;
+  margin: 0;
+  position: absolute;
+  z-index: 10;
+}
+
+.submitBtn {
+  position: fixed;
+  top: 4vh;
+  right: 50vw;
+  z-index: 12;
+}
+.topBtn {
+  position: fixed;
+  top: 4vh;
+  right: 45vw;
+  z-index: 12;
+}
+.bottomBtn {
+  position: fixed;
+  top: 4vh;
+  right: 54vw;
+  z-index: 12;
+}
+.overlay {
+  position: absolute;
+  z-index: 10;
+}
+.relativeBox {
+  position: relative;
+}

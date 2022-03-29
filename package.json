@@ -9,9 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "leaflet": "^1.7.1",
+    "leaflet-rastercoords": "^1.0.4",
     "next": "12.1.1",
+    "random-int": "^3.0.0",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "react-leaflet": "^3.2.5"
   },
   "devDependencies": {
     "eslint": "8.12.0",
