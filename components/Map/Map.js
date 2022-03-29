@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import L from "leaflet";
 import { CRS } from "leaflet";
 import * as ReactLeaflet from "react-leaflet";
@@ -47,11 +47,11 @@ const Map = ({ children, className, ...rest }) => {
     >
       <MapConsumer>
         {(map) => {
-          console.log("map center:", map.getCenter());
-          map.on("click", function (e) {
+          const marker = map.on("click", function (e) {
             const { lat, lng } = e.latlng;
             L.marker([lat, lng], { Icon }).addTo(map);
           });
+          console.log("map.on", marker);
           const rc = new rastercoords(map, [11011, 11716]);
           map.setMaxZoom(rc.zoomLevel());
           map.setView(rc.unproject([11011, 11716]), 2);
