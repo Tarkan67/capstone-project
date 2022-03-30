@@ -5,10 +5,18 @@ import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
   const [currentPicture, setCurrentPicture] = useState();
+  const [distance, setDistance] = useState();
   useEffect(() => {
     setCurrentPicture(locations[randomInteger(4)]);
   }, []);
-  return <Component {...pageProps} currentPicture={currentPicture} />;
+  return (
+    <Component
+      {...pageProps}
+      currentPicture={currentPicture}
+      distance={distance}
+      setDistance={setDistance}
+    />
+  );
 }
 
 export default MyApp;

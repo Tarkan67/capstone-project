@@ -13,12 +13,19 @@ import shadowUrl from "leaflet/dist/images/marker-shadow.png";
 import { getDistance } from "geolib";
 
 const { MapContainer, MapConsumer } = ReactLeaflet;
-const Map = ({ children, className, currentPicture, ...rest }) => {
+const Map = ({
+  children,
+  className,
+  currentPicture,
+  distance,
+  setDistance,
+  ...rest
+}) => {
   let mapClassName = styles.map;
   if (className) {
     mapClassName = `${mapClassName} ${className}`;
   }
-  console.log("map currentPicture", currentPicture);
+  console.log("map currentPicture");
   // Fix for issue between next js and react leaflet, without it no markers will show up on the map
   useEffect(() => {
     (async function init() {
@@ -39,7 +46,6 @@ const Map = ({ children, className, currentPicture, ...rest }) => {
           const [clickCount, setClickCount] = useState(0);
           const [markerStore, setMarkerStore] = useState();
           const [latLng, setLatLng] = useState();
-          const [distance, setDistance] = useState();
           ReactLeaflet.useMapEvents({
             click: (e) => {
               setLatLng(e.latlng);
@@ -66,21 +72,10 @@ const Map = ({ children, className, currentPicture, ...rest }) => {
               console.log(map);
             },
           });
-          function distancePlay() {
-            console.log(distance);
-          }
-          // console.log("berechnung", distance);
           const rc = new rastercoords(map, [11011, 11716]);
           map.setMaxZoom(rc.zoomLevel());
           // map.setView(rc.unproject([11011, 11716]), 2);
-          return children(
-            ReactLeaflet,
-            map,
-            rc,
-            latLng,
-            distance,
-            distancePlay
-          );
+          return children(ReactLeaflet, map, rc, latLng, distance);
         }}
       </MapConsumer>
     </MapContainer>

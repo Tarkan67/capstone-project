@@ -19,16 +19,24 @@ const MapEffect = ({ useMap }) => {
   return null;
 };
 
-export default function Home({ currentPicture }) {
+export default function Home({ currentPicture, distance, setDistance }) {
   const myRefMap = useRef(null);
   const executeScrollToMap = () => myRefMap.current.scrollIntoView();
   const myRefTop = useRef(null);
   const executeScrollToTop = () => myRefTop.current.scrollIntoView();
-  const UserContext = createContext();
+
+  const [distanceRight, setDistanceRight] = useState();
+
   function handleSubmit() {
-    const distance = useContext(UserContext);
-    console.log(distance);
+    if (distance < 500) {
+      setDistanceRight(1);
+    } else if (distance === undefined) {
+      setDistanceRight(3);
+    } else {
+      setDistanceRight(2);
+    }
   }
+
   return (
     <div className={styles.relativeBox}>
       <button className={styles.topBtn} onClick={executeScrollToTop}>
@@ -40,6 +48,15 @@ export default function Home({ currentPicture }) {
       <button className={styles.bottomBtn} onClick={executeScrollToMap}>
         Map
       </button>
+      {distanceRight === 1 ? (
+        <div className={styles.rightDiv}> You are Right</div>
+      ) : distanceRight === 2 ? (
+        <div className={styles.wrongDiv}> You are Wrong</div>
+      ) : distanceRight === 3 ? (
+        <div className={styles.noinputDiv}>
+          Set a Marker on the map before you Submit
+        </div>
+      ) : null}
 
       <Head>
         <title>Elden Guesser</title>
@@ -60,6 +77,8 @@ export default function Home({ currentPicture }) {
       </div>
       <div ref={myRefMap}>
         <Map
+          distance={distance}
+          setDistance={setDistance}
           currentPicture={currentPicture}
           className={styles.homeMap}
           center={[40.5, 100.5]}
@@ -81,15 +100,13 @@ export default function Home({ currentPicture }) {
             distance
           ) => (
             <>
-              <UserContext.Provider value={distance}>
-                <MapEffect useMap={useMap} />
-                <TileLayer
-                  url="/tiles/{z}/{x}/{y}.png"
-                  noWrap
-                  bounds={rc.getMaxBounds()}
-                  maxNativeZoom={rc.zoomLevel()}
-                />
-              </UserContext.Provider>
+              <MapEffect useMap={useMap} />
+              <TileLayer
+                url="/tiles/{z}/{x}/{y}.png"
+                noWrap
+                bounds={rc.getMaxBounds()}
+                maxNativeZoom={rc.zoomLevel()}
+              />
             </>
           )}
         </Map>
