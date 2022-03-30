@@ -126,7 +126,7 @@
   position: fixed;
   top: 4vh;
   right: 50vw;
-  z-index: 12;
+  z-index: 1000;
 }
 .topBtn {
   position: fixed;

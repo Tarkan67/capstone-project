@@ -10,14 +10,15 @@ import styles from "./Map.module.css";
 import iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
 import iconUrl from "leaflet/dist/images/marker-icon.png";
 import shadowUrl from "leaflet/dist/images/marker-shadow.png";
+import { getDistance } from "geolib";
 
 const { MapContainer, MapConsumer } = ReactLeaflet;
-const Map = ({ children, className, ...rest }) => {
+const Map = ({ children, className, currentPicture, ...rest }) => {
   let mapClassName = styles.map;
   if (className) {
     mapClassName = `${mapClassName} ${className}`;
   }
-  console.log(rest);
+  console.log("map currentPicture", currentPicture);
   // Fix for issue between next js and react leaflet, without it no markers will show up on the map
   useEffect(() => {
     (async function init() {
@@ -37,9 +38,18 @@ const Map = ({ children, className, ...rest }) => {
         {(map) => {
           const [clickCount, setClickCount] = useState(0);
           const [markerStore, setMarkerStore] = useState();
+          const [latLng, setLatLng] = useState();
+          const [distance, setDistance] = useState();
           ReactLeaflet.useMapEvents({
             click: (e) => {
+              setLatLng(e.latlng);
+              setDistance(
+                latLng
+                  ? getDistance(latLng, currentPicture.LatLng, 100) / 100
+                  : null
+              );
               const { lat, lng } = e.latlng;
+              // console.log(e.latlng);
               if (clickCount === 0) {
                 setClickCount(clickCount + 1);
                 markerStore ? map.removeLayer(markerStore) : null;
@@ -56,11 +66,21 @@ const Map = ({ children, className, ...rest }) => {
               console.log(map);
             },
           });
-
+          function distancePlay() {
+            console.log(distance);
+          }
+          // console.log("berechnung", distance);
           const rc = new rastercoords(map, [11011, 11716]);
           map.setMaxZoom(rc.zoomLevel());
           // map.setView(rc.unproject([11011, 11716]), 2);
-          return children(ReactLeaflet, map, rc);
+          return children(
+            ReactLeaflet,
+            map,
+            rc,
+            latLng,
+            distance,
+            distancePlay
+          );
         }}
       </MapConsumer>
     </MapContainer>
