@@ -10,14 +10,22 @@ import styles from "./Map.module.css";
 import iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
 import iconUrl from "leaflet/dist/images/marker-icon.png";
 import shadowUrl from "leaflet/dist/images/marker-shadow.png";
+import { getDistance } from "geolib";
 
 const { MapContainer, MapConsumer } = ReactLeaflet;
-const Map = ({ children, className, ...rest }) => {
+const Map = ({
+  children,
+  className,
+  currentPicture,
+  distance,
+  setDistance,
+  ...rest
+}) => {
   let mapClassName = styles.map;
   if (className) {
     mapClassName = `${mapClassName} ${className}`;
   }
-  console.log(rest);
+  console.log("map currentPicture");
   // Fix for issue between next js and react leaflet, without it no markers will show up on the map
   useEffect(() => {
     (async function init() {
@@ -32,30 +40,42 @@ const Map = ({ children, className, ...rest }) => {
   }, []);
 
   return (
-    <MapContainer
-      className={mapClassName}
-      {...rest}
-      CRS={CRS.Simple}
-      bounds={[
-        [0, 0],
-        [8192, 8192],
-      ]}
-      fitBounds={[
-        [0, 0],
-        [8192, 8192],
-      ]}
-    >
+    <MapContainer className={mapClassName} {...rest} CRS={CRS.Simple}>
       <MapConsumer>
         {(map) => {
-          const marker = map.on("click", function (e) {
-            const { lat, lng } = e.latlng;
-            L.marker([lat, lng], { Icon }).addTo(map);
+          const [clickCount, setClickCount] = useState(0);
+          const [markerStore, setMarkerStore] = useState();
+          const [latLng, setLatLng] = useState();
+          ReactLeaflet.useMapEvents({
+            click: (e) => {
+              setLatLng(e.latlng);
+              setDistance(
+                latLng
+                  ? getDistance(latLng, currentPicture.LatLng, 100) / 100
+                  : null
+              );
+              const { lat, lng } = e.latlng;
+              // console.log(e.latlng);
+              if (clickCount === 0) {
+                setClickCount(clickCount + 1);
+                markerStore ? map.removeLayer(markerStore) : null;
+                setMarkerStore(L.marker([lat, lng], { Icon }).addTo(map));
+              } else if (clickCount === 1) {
+                setClickCount(clickCount - 1);
+                map.removeLayer(markerStore);
+                setMarkerStore(L.marker([lat, lng], { Icon }).addTo(map));
+              }
+              console.log(e);
+              console.log(clickCount);
+            },
+            keypress: (e) => {
+              console.log(map);
+            },
           });
-          console.log("map.on", marker);
           const rc = new rastercoords(map, [11011, 11716]);
           map.setMaxZoom(rc.zoomLevel());
-          map.setView(rc.unproject([11011, 11716]), 2);
-          return children(ReactLeaflet, map, rc);
+          // map.setView(rc.unproject([11011, 11716]), 2);
+          return children(ReactLeaflet, map, rc, latLng, distance);
         }}
       </MapConsumer>
     </MapContainer>

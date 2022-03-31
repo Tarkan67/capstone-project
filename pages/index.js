@@ -1,13 +1,13 @@
 import Head from "next/head";
-import { useEffect } from "react";
+import { useEffect, useState, useRef, createContext, useContext } from "react";
 import Image from "next/image";
-import { useRef } from "react";
 
 import Map from "../components/Map";
 
 import styles from "../styles/Home.module.css";
 import locations from "../db/location";
 import randomInteger from "random-int";
+import { getDistance } from "geolib";
 
 const MapEffect = ({ useMap }) => {
   const map = useMap();
@@ -19,21 +19,44 @@ const MapEffect = ({ useMap }) => {
   return null;
 };
 
-export default function Home() {
+export default function Home({ currentPicture, distance, setDistance }) {
   const myRefMap = useRef(null);
   const executeScrollToMap = () => myRefMap.current.scrollIntoView();
   const myRefTop = useRef(null);
   const executeScrollToTop = () => myRefTop.current.scrollIntoView();
+
+  const [distanceRight, setDistanceRight] = useState();
+
+  function handleSubmit() {
+    if (distance < 500) {
+      setDistanceRight(1);
+    } else if (distance === undefined) {
+      setDistanceRight(3);
+    } else {
+      setDistanceRight(2);
+    }
+  }
 
   return (
     <div className={styles.relativeBox}>
       <button className={styles.topBtn} onClick={executeScrollToTop}>
         Top
       </button>
-      <button className={styles.submitBtn}>Submit</button>
+      <button className={styles.submitBtn} onClick={handleSubmit}>
+        Submit
+      </button>
       <button className={styles.bottomBtn} onClick={executeScrollToMap}>
         Map
       </button>
+      {distanceRight === 1 ? (
+        <div className={styles.rightDiv}> You are Right</div>
+      ) : distanceRight === 2 ? (
+        <div className={styles.wrongDiv}> You are Wrong</div>
+      ) : distanceRight === 3 ? (
+        <div className={styles.noinputDiv}>
+          Set a Marker on the map before you Submit
+        </div>
+      ) : null}
 
       <Head>
         <title>Elden Guesser</title>
@@ -41,7 +64,11 @@ export default function Home() {
       </Head>
       <div ref={myRefTop}>
         <Image
-          src={locations[randomInteger(4)].path}
+          src={
+            currentPicture
+              ? currentPicture.path
+              : locations[randomInteger(4)].path
+          }
           alt="First Picture"
           width="2160"
           height="1215"
@@ -50,6 +77,9 @@ export default function Home() {
       </div>
       <div ref={myRefMap}>
         <Map
+          distance={distance}
+          setDistance={setDistance}
+          currentPicture={currentPicture}
           className={styles.homeMap}
           center={[40.5, 100.5]}
           zoom={3}
@@ -62,7 +92,13 @@ export default function Home() {
             [50.5, 30.5],
           ]}
         >
-          {({ TileLayer, Marker, Popup, useMap, ImageOverlay }, map, rc) => (
+          {(
+            { TileLayer, Marker, Popup, useMap, ImageOverlay },
+            map,
+            rc,
+            latLng,
+            distance
+          ) => (
             <>
               <MapEffect useMap={useMap} />
               <TileLayer
@@ -71,15 +107,6 @@ export default function Home() {
                 bounds={rc.getMaxBounds()}
                 maxNativeZoom={rc.zoomLevel()}
               />
-              <Marker position={[40, 100]}>
-                <Popup>
-                  <Image
-                    src="/location.png"
-                    alt="Picture of location"
-                    layout="fill"
-                  />
-                </Popup>
-              </Marker>
             </>
           )}
         </Map>
