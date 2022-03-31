@@ -17,8 +17,13 @@ const Map = ({
   children,
   className,
   currentPicture,
+  setCurrentPicture,
   distance,
   setDistance,
+  markerStore,
+  setMarkerStore,
+  clearMap,
+  setClearMap,
   ...rest
 }) => {
   let mapClassName = styles.map;
@@ -44,7 +49,7 @@ const Map = ({
       <MapConsumer>
         {(map) => {
           const [clickCount, setClickCount] = useState(0);
-          const [markerStore, setMarkerStore] = useState();
+          // const [markerStore, setMarkerStore] = useState();
           const [latLng, setLatLng] = useState();
           ReactLeaflet.useMapEvents({
             click: (e) => {
@@ -72,6 +77,7 @@ const Map = ({
               console.log(map);
             },
           });
+          clearMap ? map.removeLayer(markerStore) & setClearMap(false) : null;
           const rc = new rastercoords(map, [11011, 11716]);
           map.setMaxZoom(rc.zoomLevel());
           // map.setView(rc.unproject([11011, 11716]), 2);

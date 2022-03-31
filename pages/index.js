@@ -1,13 +1,11 @@
 import Head from "next/head";
-import { useEffect, useState, useRef, createContext, useContext } from "react";
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
-
 import Map from "../components/Map";
 
 import styles from "../styles/Home.module.css";
 import locations from "../db/location";
 import randomInteger from "random-int";
-import { getDistance } from "geolib";
 
 const MapEffect = ({ useMap }) => {
   const map = useMap();
@@ -18,8 +16,16 @@ const MapEffect = ({ useMap }) => {
 
   return null;
 };
-
-export default function Home({ currentPicture, distance, setDistance }) {
+export default function Home({
+  currentPicture,
+  setCurrentPicture,
+  distance,
+  setDistance,
+  markerStore,
+  setMarkerStore,
+  clearMap,
+  setClearMap,
+}) {
   const myRefMap = useRef(null);
   const executeScrollToMap = () => myRefMap.current.scrollIntoView();
   const myRefTop = useRef(null);
@@ -37,19 +43,36 @@ export default function Home({ currentPicture, distance, setDistance }) {
     }
   }
 
+  function handleNextMap() {
+    setDistanceRight(undefined);
+    executeScrollToTop();
+    setCurrentPicture(locations[randomInteger(4)]);
+    setClearMap(true);
+  }
+
   return (
     <div className={styles.relativeBox}>
-      <button className={styles.topBtn} onClick={executeScrollToTop}>
-        Top
-      </button>
-      <button className={styles.submitBtn} onClick={handleSubmit}>
-        Submit
-      </button>
-      <button className={styles.bottomBtn} onClick={executeScrollToMap}>
-        Map
-      </button>
+      {distanceRight ? (
+        <button className={styles.bottomBtn} onClick={handleNextMap}>
+          Next Map
+        </button>
+      ) : (
+        <>
+          <button className={styles.topBtn} onClick={executeScrollToTop}>
+            Top
+          </button>
+          <button className={styles.submitBtn} onClick={handleSubmit}>
+            Submit
+          </button>
+          <button className={styles.bottomBtn} onClick={executeScrollToMap}>
+            Map
+          </button>
+        </>
+      )}
       {distanceRight === 1 ? (
-        <div className={styles.rightDiv}> You are Right</div>
+        <>
+          <div className={styles.rightDiv}> You are Right</div>
+        </>
       ) : distanceRight === 2 ? (
         <div className={styles.wrongDiv}> You are Wrong</div>
       ) : distanceRight === 3 ? (
@@ -77,9 +100,14 @@ export default function Home({ currentPicture, distance, setDistance }) {
       </div>
       <div ref={myRefMap}>
         <Map
+          markerStore={markerStore}
+          setMarkerStore={setMarkerStore}
           distance={distance}
           setDistance={setDistance}
           currentPicture={currentPicture}
+          setCurrentPicture={setCurrentPicture}
+          clearMap={clearMap}
+          setClearMap={setClearMap}
           className={styles.homeMap}
           center={[40.5, 100.5]}
           zoom={3}
