@@ -159,21 +159,6 @@ export default function Home({
                 bounds={rc.getMaxBounds()}
                 maxNativeZoom={rc.zoomLevel()}
               />
-              {/* {checkAnswer
-                ? setPolyGonStore(
-                    <Polyline
-                      positions={[
-                        [
-                          [
-                            currentPicture.LatLng.lat,
-                            currentPicture.LatLng.lng,
-                          ],
-                          [markerStore._latlng.lat, markerStore._latlng.lng],
-                        ],
-                      ]}
-                    ></Polyline>
-                  )
-                : null} */}
             </>
           )}
         </Map>
