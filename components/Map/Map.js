@@ -11,6 +11,8 @@ import iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
 import iconUrl from "leaflet/dist/images/marker-icon.png";
 import shadowUrl from "leaflet/dist/images/marker-shadow.png";
 import { getDistance } from "geolib";
+import { polygon } from "leaflet";
+import { polyline } from "leaflet";
 
 const { MapContainer, MapConsumer } = ReactLeaflet;
 const Map = ({
@@ -24,6 +26,10 @@ const Map = ({
   setMarkerStore,
   clearMap,
   setClearMap,
+  checkAnswer,
+  setCheckAnswer,
+  polyGonStore,
+  setPolyGonStore,
   ...rest
 }) => {
   let mapClassName = styles.map;
@@ -49,8 +55,10 @@ const Map = ({
       <MapConsumer>
         {(map) => {
           const [clickCount, setClickCount] = useState(0);
-          // const [markerStore, setMarkerStore] = useState();
           const [latLng, setLatLng] = useState();
+          const [layerGroup, setLayerGroup] = useState(
+            L.layerGroup().addTo(map)
+          );
           ReactLeaflet.useMapEvents({
             click: (e) => {
               setLatLng(e.latlng);
@@ -60,24 +68,40 @@ const Map = ({
                   : null
               );
               const { lat, lng } = e.latlng;
-              // console.log(e.latlng);
               if (clickCount === 0) {
                 setClickCount(clickCount + 1);
                 markerStore ? map.removeLayer(markerStore) : null;
-                setMarkerStore(L.marker([lat, lng], { Icon }).addTo(map));
+                setMarkerStore(
+                  L.marker([lat, lng], { Icon }).addTo(layerGroup)
+                );
               } else if (clickCount === 1) {
                 setClickCount(clickCount - 1);
                 map.removeLayer(markerStore);
-                setMarkerStore(L.marker([lat, lng], { Icon }).addTo(map));
+                setMarkerStore(
+                  L.marker([lat, lng], { Icon }).addTo(layerGroup)
+                );
               }
-              console.log(e);
-              console.log(clickCount);
+              console.log("checkAnswer", checkAnswer);
+              console.log("polyGonStore", polyGonStore);
+              // console.log("map layers", map);
+              // console.log("polyline", polyGonStore);
             },
             keypress: (e) => {
               console.log(map);
             },
           });
-          clearMap ? map.removeLayer(markerStore) & setClearMap(false) : null;
+          checkAnswer & !polyGonStore
+            ? setPolyGonStore(
+                L.polyline(
+                  [
+                    [currentPicture.LatLng.lat, currentPicture.LatLng.lng],
+                    [markerStore._latlng.lat, markerStore._latlng.lng],
+                  ],
+                  { color: "red" }
+                ).addTo(layerGroup)
+              ) & setCheckAnswer(false)
+            : null;
+          clearMap ? layerGroup.clearLayers() & setClearMap(false) : null;
           const rc = new rastercoords(map, [11011, 11716]);
           map.setMaxZoom(rc.zoomLevel());
           // map.setView(rc.unproject([11011, 11716]), 2);

@@ -25,6 +25,10 @@ export default function Home({
   setMarkerStore,
   clearMap,
   setClearMap,
+  checkAnswer,
+  setCheckAnswer,
+  polyGonStore,
+  setPolyGonStore,
 }) {
   const myRefMap = useRef(null);
   const executeScrollToMap = () => myRefMap.current.scrollIntoView();
@@ -48,14 +52,30 @@ export default function Home({
     executeScrollToTop();
     setCurrentPicture(locations[randomInteger(4)]);
     setClearMap(true);
+    setPolyGonStore();
+  }
+
+  function handleCheckAnswer() {
+    console.log("handleCheckAnswer", checkAnswer);
+    console.log("polygon handleCheckAnswer", polyGonStore);
+    if (markerStore) {
+      setCheckAnswer(true);
+    } else {
+      setCheckAnswer(false);
+    }
   }
 
   return (
     <div className={styles.relativeBox}>
       {distanceRight ? (
-        <button className={styles.bottomBtn} onClick={handleNextMap}>
-          Next Map
-        </button>
+        <>
+          <button className={styles.bottomBtn} onClick={handleNextMap}>
+            Next Map
+          </button>
+          <button className={styles.topBtn} onClick={handleCheckAnswer}>
+            Check Answer
+          </button>
+        </>
       ) : (
         <>
           <button className={styles.topBtn} onClick={executeScrollToTop}>
@@ -100,6 +120,10 @@ export default function Home({
       </div>
       <div ref={myRefMap}>
         <Map
+          polyGonStore={polyGonStore}
+          setPolyGonStore={setPolyGonStore}
+          checkAnswer={checkAnswer}
+          setCheckAnswer={setCheckAnswer}
           markerStore={markerStore}
           setMarkerStore={setMarkerStore}
           distance={distance}
@@ -121,7 +145,7 @@ export default function Home({
           ]}
         >
           {(
-            { TileLayer, Marker, Popup, useMap, ImageOverlay },
+            { TileLayer, Marker, Popup, useMap, ImageOverlay, Polyline },
             map,
             rc,
             latLng,
@@ -135,6 +159,21 @@ export default function Home({
                 bounds={rc.getMaxBounds()}
                 maxNativeZoom={rc.zoomLevel()}
               />
+              {/* {checkAnswer
+                ? setPolyGonStore(
+                    <Polyline
+                      positions={[
+                        [
+                          [
+                            currentPicture.LatLng.lat,
+                            currentPicture.LatLng.lng,
+                          ],
+                          [markerStore._latlng.lat, markerStore._latlng.lng],
+                        ],
+                      ]}
+                    ></Polyline>
+                  )
+                : null} */}
             </>
           )}
         </Map>
