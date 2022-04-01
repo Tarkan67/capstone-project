@@ -25,6 +25,8 @@ export default function Home({
   setMarkerStore,
   clearMap,
   setClearMap,
+  checkAnswer,
+  setCheckAnswer,
 }) {
   const myRefMap = useRef(null);
   const executeScrollToMap = () => myRefMap.current.scrollIntoView();
@@ -50,12 +52,25 @@ export default function Home({
     setClearMap(true);
   }
 
+  function handleCheckAnswer() {
+    if (markerStore) {
+      setCheckAnswer(true);
+    } else {
+      setCheckAnswer(false);
+    }
+  }
+
   return (
     <div className={styles.relativeBox}>
       {distanceRight ? (
-        <button className={styles.bottomBtn} onClick={handleNextMap}>
-          Next Map
-        </button>
+        <>
+          <button className={styles.bottomBtn} onClick={handleNextMap}>
+            Next Map
+          </button>
+          <button className={styles.topBtn} onClick={handleCheckAnswer}>
+            Check Answer
+          </button>
+        </>
       ) : (
         <>
           <button className={styles.topBtn} onClick={executeScrollToTop}>
@@ -100,6 +115,8 @@ export default function Home({
       </div>
       <div ref={myRefMap}>
         <Map
+          checkAnswer={checkAnswer}
+          setCheckAnswer={setCheckAnswer}
           markerStore={markerStore}
           setMarkerStore={setMarkerStore}
           distance={distance}
@@ -111,17 +128,9 @@ export default function Home({
           className={styles.homeMap}
           center={[40.5, 100.5]}
           zoom={3}
-          bounds={[
-            [0, 0],
-            [50.5, 30.5],
-          ]}
-          fitBounds={[
-            [0, 0],
-            [50.5, 30.5],
-          ]}
         >
           {(
-            { TileLayer, Marker, Popup, useMap, ImageOverlay },
+            { TileLayer, Marker, Popup, useMap, ImageOverlay, Polyline },
             map,
             rc,
             latLng,

@@ -24,6 +24,8 @@ const Map = ({
   setMarkerStore,
   clearMap,
   setClearMap,
+  checkAnswer,
+  setCheckAnswer,
   ...rest
 }) => {
   let mapClassName = styles.map;
@@ -49,8 +51,10 @@ const Map = ({
       <MapConsumer>
         {(map) => {
           const [clickCount, setClickCount] = useState(0);
-          // const [markerStore, setMarkerStore] = useState();
           const [latLng, setLatLng] = useState();
+          const [layerGroup, setLayerGroup] = useState(
+            L.layerGroup().addTo(map)
+          );
           ReactLeaflet.useMapEvents({
             click: (e) => {
               setLatLng(e.latlng);
@@ -60,27 +64,53 @@ const Map = ({
                   : null
               );
               const { lat, lng } = e.latlng;
-              // console.log(e.latlng);
               if (clickCount === 0) {
                 setClickCount(clickCount + 1);
                 markerStore ? map.removeLayer(markerStore) : null;
-                setMarkerStore(L.marker([lat, lng], { Icon }).addTo(map));
+                setMarkerStore(
+                  L.marker([lat, lng], { Icon }).addTo(layerGroup)
+                );
               } else if (clickCount === 1) {
                 setClickCount(clickCount - 1);
-                map.removeLayer(markerStore);
-                setMarkerStore(L.marker([lat, lng], { Icon }).addTo(map));
+                markerStore ? map.removeLayer(markerStore) : null;
+                setMarkerStore(
+                  L.marker([lat, lng], { Icon }).addTo(layerGroup)
+                );
               }
-              console.log(e);
-              console.log(clickCount);
-            },
-            keypress: (e) => {
-              console.log(map);
             },
           });
-          clearMap ? map.removeLayer(markerStore) & setClearMap(false) : null;
+
+          if (checkAnswer && markerStore) {
+            console.log(markerStore);
+            L.polyline(
+              [
+                [currentPicture.LatLng.lat, currentPicture.LatLng.lng],
+                [markerStore._latlng.lat, markerStore._latlng.lng],
+              ],
+              { color: "red" }
+            ).addTo(layerGroup);
+            setCheckAnswer(false);
+          } else {
+            null;
+          }
+
+          if (clearMap && markerStore) {
+            layerGroup.clearLayers() &
+              setMarkerStore() &
+              setDistance() &
+              setClearMap(false);
+          } else {
+            null;
+          }
+
+          // clearMap
+          //   ? layerGroup.clearLayers() &
+          //     setMarkerStore(undefined) &
+          //     setDistance() &
+          //     setClearMap(false)
+          //   : null;
           const rc = new rastercoords(map, [11011, 11716]);
           map.setMaxZoom(rc.zoomLevel());
-          // map.setView(rc.unproject([11011, 11716]), 2);
           return children(ReactLeaflet, map, rc, latLng, distance);
         }}
       </MapConsumer>

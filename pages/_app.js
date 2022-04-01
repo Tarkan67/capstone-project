@@ -8,12 +8,15 @@ function MyApp({ Component, pageProps }) {
   const [distance, setDistance] = useState();
   const [markerStore, setMarkerStore] = useState();
   const [clearMap, setClearMap] = useState(false);
+  const [checkAnswer, setCheckAnswer] = useState(false);
   useEffect(() => {
     setCurrentPicture(locations[randomInteger(4)]);
   }, []);
   return (
     <Component
       {...pageProps}
+      checkAnswer={checkAnswer}
+      setCheckAnswer={setCheckAnswer}
       clearMap={clearMap}
       setClearMap={setClearMap}
       markerStore={markerStore}
