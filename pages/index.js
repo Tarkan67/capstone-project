@@ -6,6 +6,8 @@ import Map from "../components/Map";
 import styles from "../styles/Home.module.css";
 import locations from "../db/location";
 import randomInteger from "random-int";
+import LoginButton from "../components/LoginButton/LoginButton";
+import { getSession } from "next-auth/react";
 
 const MapEffect = ({ useMap }) => {
   const map = useMap();
@@ -62,6 +64,7 @@ export default function Home({
 
   return (
     <div className={styles.relativeBox}>
+      <LoginButton />
       {distanceRight ? (
         <>
           <button className={styles.bottomBtn} onClick={handleNextMap}>
@@ -150,4 +153,13 @@ export default function Home({
       </div>
     </div>
   );
+}
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  return {
+    props: {
+      session,
+    },
+  };
 }
