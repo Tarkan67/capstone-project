@@ -72,7 +72,7 @@ const Map = ({
                 );
               } else if (clickCount === 1) {
                 setClickCount(clickCount - 1);
-                map.removeLayer(markerStore);
+                markerStore ? map.removeLayer(markerStore) : null;
                 setMarkerStore(
                   L.marker([lat, lng], { Icon }).addTo(layerGroup)
                 );
@@ -80,7 +80,8 @@ const Map = ({
             },
           });
 
-          if (checkAnswer) {
+          if (checkAnswer && markerStore) {
+            console.log(markerStore);
             L.polyline(
               [
                 [currentPicture.LatLng.lat, currentPicture.LatLng.lng],
@@ -92,7 +93,22 @@ const Map = ({
           } else {
             null;
           }
-          clearMap ? layerGroup.clearLayers() & setClearMap(false) : null;
+
+          if (clearMap && markerStore) {
+            layerGroup.clearLayers() &
+              setMarkerStore() &
+              setDistance() &
+              setClearMap(false);
+          } else {
+            null;
+          }
+
+          // clearMap
+          //   ? layerGroup.clearLayers() &
+          //     setMarkerStore(undefined) &
+          //     setDistance() &
+          //     setClearMap(false)
+          //   : null;
           const rc = new rastercoords(map, [11011, 11716]);
           map.setMaxZoom(rc.zoomLevel());
           return children(ReactLeaflet, map, rc, latLng, distance);
