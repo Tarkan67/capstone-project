@@ -27,8 +27,6 @@ export default function Home({
   setClearMap,
   checkAnswer,
   setCheckAnswer,
-  polyGonStore,
-  setPolyGonStore,
 }) {
   const myRefMap = useRef(null);
   const executeScrollToMap = () => myRefMap.current.scrollIntoView();
@@ -52,12 +50,9 @@ export default function Home({
     executeScrollToTop();
     setCurrentPicture(locations[randomInteger(4)]);
     setClearMap(true);
-    setPolyGonStore();
   }
 
   function handleCheckAnswer() {
-    console.log("handleCheckAnswer", checkAnswer);
-    console.log("polygon handleCheckAnswer", polyGonStore);
     if (markerStore) {
       setCheckAnswer(true);
     } else {
@@ -120,8 +115,6 @@ export default function Home({
       </div>
       <div ref={myRefMap}>
         <Map
-          polyGonStore={polyGonStore}
-          setPolyGonStore={setPolyGonStore}
           checkAnswer={checkAnswer}
           setCheckAnswer={setCheckAnswer}
           markerStore={markerStore}
@@ -135,14 +128,6 @@ export default function Home({
           className={styles.homeMap}
           center={[40.5, 100.5]}
           zoom={3}
-          bounds={[
-            [0, 0],
-            [50.5, 30.5],
-          ]}
-          fitBounds={[
-            [0, 0],
-            [50.5, 30.5],
-          ]}
         >
           {(
             { TileLayer, Marker, Popup, useMap, ImageOverlay, Polyline },

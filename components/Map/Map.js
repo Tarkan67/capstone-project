@@ -11,8 +11,6 @@ import iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
 import iconUrl from "leaflet/dist/images/marker-icon.png";
 import shadowUrl from "leaflet/dist/images/marker-shadow.png";
 import { getDistance } from "geolib";
-import { polygon } from "leaflet";
-import { polyline } from "leaflet";
 
 const { MapContainer, MapConsumer } = ReactLeaflet;
 const Map = ({
@@ -28,8 +26,6 @@ const Map = ({
   setClearMap,
   checkAnswer,
   setCheckAnswer,
-  polyGonStore,
-  setPolyGonStore,
   ...rest
 }) => {
   let mapClassName = styles.map;
@@ -81,30 +77,24 @@ const Map = ({
                   L.marker([lat, lng], { Icon }).addTo(layerGroup)
                 );
               }
-              console.log("checkAnswer", checkAnswer);
-              console.log("polyGonStore", polyGonStore);
-              // console.log("map layers", map);
-              // console.log("polyline", polyGonStore);
-            },
-            keypress: (e) => {
-              console.log(map);
             },
           });
-          checkAnswer & !polyGonStore
-            ? setPolyGonStore(
-                L.polyline(
-                  [
-                    [currentPicture.LatLng.lat, currentPicture.LatLng.lng],
-                    [markerStore._latlng.lat, markerStore._latlng.lng],
-                  ],
-                  { color: "red" }
-                ).addTo(layerGroup)
-              ) & setCheckAnswer(false)
-            : null;
+
+          if (checkAnswer) {
+            L.polyline(
+              [
+                [currentPicture.LatLng.lat, currentPicture.LatLng.lng],
+                [markerStore._latlng.lat, markerStore._latlng.lng],
+              ],
+              { color: "red" }
+            ).addTo(layerGroup);
+            setCheckAnswer(false);
+          } else {
+            null;
+          }
           clearMap ? layerGroup.clearLayers() & setClearMap(false) : null;
           const rc = new rastercoords(map, [11011, 11716]);
           map.setMaxZoom(rc.zoomLevel());
-          // map.setView(rc.unproject([11011, 11716]), 2);
           return children(ReactLeaflet, map, rc, latLng, distance);
         }}
       </MapConsumer>

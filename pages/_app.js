@@ -7,7 +7,6 @@ function MyApp({ Component, pageProps }) {
   const [currentPicture, setCurrentPicture] = useState();
   const [distance, setDistance] = useState();
   const [markerStore, setMarkerStore] = useState();
-  const [polyGonStore, setPolyGonStore] = useState();
   const [clearMap, setClearMap] = useState(false);
   const [checkAnswer, setCheckAnswer] = useState(false);
   useEffect(() => {
@@ -16,8 +15,6 @@ function MyApp({ Component, pageProps }) {
   return (
     <Component
       {...pageProps}
-      polyGonStore={polyGonStore}
-      setPolyGonStore={setPolyGonStore}
       checkAnswer={checkAnswer}
       setCheckAnswer={setCheckAnswer}
       clearMap={clearMap}
