@@ -102,13 +102,6 @@ const Map = ({
           } else {
             null;
           }
-
-          // clearMap
-          //   ? layerGroup.clearLayers() &
-          //     setMarkerStore(undefined) &
-          //     setDistance() &
-          //     setClearMap(false)
-          //   : null;
           const rc = new rastercoords(map, [11011, 11716]);
           map.setMaxZoom(rc.zoomLevel());
           return children(ReactLeaflet, map, rc, latLng, distance);
