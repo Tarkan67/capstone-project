@@ -26,6 +26,12 @@ const Map = ({
   setClearMap,
   checkAnswer,
   setCheckAnswer,
+  clickCount,
+  setClickCount,
+  latLng,
+  setLatLng,
+  layerGroup,
+  setLayerGroup,
   ...rest
 }) => {
   let mapClassName = styles.map;
@@ -44,40 +50,43 @@ const Map = ({
       });
     })();
   }, []);
-
+  function MyComponent() {
+    const map = ReactLeaflet.useMapEvents({
+      click: (e) => {
+        function handleAddMarker(marker) {
+          setMarkerStore(marker);
+        }
+        function handleClickCount(value) {
+          setClickCount(clickCount + value);
+        }
+        setLatLng(e.latlng);
+        setDistance(
+          latLng ? getDistance(latLng, currentPicture.LatLng, 100) / 100 : null
+        );
+        const { lat, lng } = e.latlng;
+        if (clickCount === 0 && !checkAnswer) {
+          handleClickCount(1);
+          markerStore ? map.removeLayer(markerStore) : null;
+          const marker = L.marker([lat, lng], { Icon }).addTo(layerGroup);
+          handleAddMarker(marker);
+        } else if (clickCount === 1 && !checkAnswer) {
+          handleClickCount(-1);
+          markerStore ? map.removeLayer(markerStore) : null;
+          const marker = L.marker([lat, lng], { Icon }).addTo(layerGroup);
+          handleAddMarker(marker);
+        }
+      },
+    });
+    return null;
+  }
   return (
     <MapContainer className={mapClassName} {...rest} CRS={CRS.Simple}>
+      <MyComponent />
       <MapConsumer>
         {(map) => {
-          const [clickCount, setClickCount] = useState(0);
-          const [latLng, setLatLng] = useState();
-          const [layerGroup, setLayerGroup] = useState(
-            L.layerGroup().addTo(map)
-          );
-          ReactLeaflet.useMapEvents({
-            click: (e) => {
-              setLatLng(e.latlng);
-              setDistance(
-                latLng
-                  ? getDistance(latLng, currentPicture.LatLng, 100) / 100
-                  : null
-              );
-              const { lat, lng } = e.latlng;
-              if (clickCount === 0 && !checkAnswer) {
-                setClickCount(clickCount + 1);
-                markerStore ? map.removeLayer(markerStore) : null;
-                setMarkerStore(
-                  L.marker([lat, lng], { Icon }).addTo(layerGroup)
-                );
-              } else if (clickCount === 1 && !checkAnswer) {
-                setClickCount(clickCount - 1);
-                markerStore ? map.removeLayer(markerStore) : null;
-                setMarkerStore(
-                  L.marker([lat, lng], { Icon }).addTo(layerGroup)
-                );
-              }
-            },
-          });
+          if (!layerGroup) {
+            handleLayerGroup();
+          }
 
           if (checkAnswer && markerStore) {
             L.polyline(
@@ -90,13 +99,19 @@ const Map = ({
           } else {
             null;
           }
+          function handleLayerGroup() {
+            setLayerGroup(L.layerGroup().addTo(map));
+          }
+          function handleClearMap() {
+            setMarkerStore();
+            setDistance();
+            setClearMap(false);
+            setCheckAnswer(false);
+          }
 
           if (clearMap && markerStore) {
-            layerGroup.clearLayers() &
-              setMarkerStore() &
-              setDistance() &
-              setClearMap(false);
-            setCheckAnswer(false);
+            layerGroup.clearLayers();
+            handleClearMap();
           } else {
             null;
           }

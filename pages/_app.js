@@ -6,6 +6,7 @@ import locations from "../db/location";
 import "../styles/globals.css";
 import { createTheme } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
+// import * as ReactLeaflet from "react-leaflet";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   const theme = createTheme({
@@ -23,6 +24,9 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
       },
     },
   });
+  const [clickCount, setClickCount] = useState(0);
+  const [latLng, setLatLng] = useState();
+  const [layerGroup, setLayerGroup] = useState();
   const [currentPicture, setCurrentPicture] = useState();
   const [distance, setDistance] = useState();
   const [markerStore, setMarkerStore] = useState();
@@ -44,6 +48,12 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
           >
             <Component
               {...pageProps}
+              clickCount={clickCount}
+              setClickCount={setClickCount}
+              latLng={latLng}
+              setLatLng={setLatLng}
+              layerGroup={layerGroup}
+              setLayerGroup={setLayerGroup}
               checkAnswer={checkAnswer}
               setCheckAnswer={setCheckAnswer}
               clearMap={clearMap}
