@@ -113,18 +113,13 @@ export default function Home({
       )}
       {distanceRight === 1 ? (
         <>
-          <Alert
-            onClose={() => {}}
-            className={styles.alertBox}
-            severity="success"
-          >
+          <Alert className={styles.alertBox} severity="success">
             You are Right!
           </Alert>
         </>
       ) : distanceRight === 2 ? (
         <>
           <Alert className={styles.alertBox} severity="error">
-            {/* <AlertTitle>Wrong Answer</AlertTitle> */}
             Sorry! You are not in range.
           </Alert>
         </>
@@ -135,10 +130,6 @@ export default function Home({
               Set a Marker on the map before you Submit
             </Alert>
           </AlertTitle>
-
-          <div className={styles.noinputDiv}>
-            Set a Marker on the map before you Submit
-          </div>
         </>
       ) : null}
 

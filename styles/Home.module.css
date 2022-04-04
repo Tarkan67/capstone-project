@@ -124,7 +124,7 @@
 
 .buttonGroup {
   position: fixed;
-  top: 4vh;
+  top: 6vh;
   right: 42vw;
   z-index: 12;
 }
@@ -141,29 +141,4 @@
 }
 .relativeBox {
   position: relative;
-}
-
-.rightDiv {
-  position: fixed;
-  top: 50vh;
-  right: 55vw;
-  background-color: chartreuse;
-  z-index: 1000;
-}
-.wrongDiv {
-  position: fixed;
-  top: 50vh;
-  right: 55vw;
-  background-color: rgb(255, 0, 0);
-  z-index: 1000;
-}
-.noinputDiv {
-  position: fixed;
-  top: 50vh;
-  right: 55vw;
-  background-color: rgb(216, 213, 213);
-  z-index: 1000;
-}
-.hide {
-  display: none;
 }
