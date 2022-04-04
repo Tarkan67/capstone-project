@@ -13,7 +13,6 @@ import { Alert, AlertTitle, ButtonGroup, Tooltip } from "@mui/material";
 
 const MapEffect = ({ useMap }) => {
   const map = useMap();
-
   useEffect(() => {
     console.log("map", { map });
   }, [map]);
@@ -31,6 +30,12 @@ export default function Home({
   setClearMap,
   checkAnswer,
   setCheckAnswer,
+  clickCount,
+  setClickCount,
+  latLng,
+  setLatLng,
+  layerGroup,
+  setLayerGroup,
 }) {
   const myRefMap = useRef(null);
   const executeScrollToMap = () => myRefMap.current.scrollIntoView();
@@ -152,6 +157,12 @@ export default function Home({
       </div>
       <div ref={myRefMap}>
         <Map
+          clickCount={clickCount}
+          setClickCount={setClickCount}
+          latLng={latLng}
+          setLatLng={setLatLng}
+          layerGroup={layerGroup}
+          setLayerGroup={setLayerGroup}
           checkAnswer={checkAnswer}
           setCheckAnswer={setCheckAnswer}
           markerStore={markerStore}
