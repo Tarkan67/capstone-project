@@ -122,24 +122,19 @@
   z-index: 10;
 }
 
-.submitBtn {
+.buttonGroup {
   position: fixed;
   top: 4vh;
-  right: 50vw;
-  z-index: 1000;
-}
-.topBtn {
-  position: fixed;
-  top: 4vh;
-  right: 55vw;
+  right: 42vw;
   z-index: 12;
 }
-.bottomBtn {
+.alertBox {
   position: fixed;
-  top: 4vh;
+  top: 50vh;
   right: 45vw;
   z-index: 12;
 }
+
 .overlay {
   position: absolute;
   z-index: 10;
@@ -168,4 +163,7 @@
   right: 55vw;
   background-color: rgb(216, 213, 213);
   z-index: 1000;
+}
+.hide {
+  display: none;
 }

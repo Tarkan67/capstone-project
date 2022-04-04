@@ -8,6 +8,8 @@ import locations from "../db/location";
 import randomInteger from "random-int";
 import LoginButton from "../components/LoginButton/LoginButton";
 import { getSession } from "next-auth/react";
+import Button from "@mui/material/Button";
+import { Alert, AlertTitle, ButtonGroup, Tooltip } from "@mui/material";
 
 const MapEffect = ({ useMap }) => {
   const map = useMap();
@@ -67,36 +69,77 @@ export default function Home({
       <LoginButton />
       {distanceRight ? (
         <>
-          <button className={styles.bottomBtn} onClick={handleNextMap}>
-            Next Map
-          </button>
-          <button className={styles.topBtn} onClick={handleCheckAnswer}>
-            Check Answer
-          </button>
+          <ButtonGroup
+            className={styles.buttonGroup}
+            variant="contained"
+            aria-label="outlined primary button group"
+          >
+            <Tooltip title="Right answer will be shown.">
+              <Button variant="contained" onClick={handleCheckAnswer}>
+                Check Answer
+              </Button>
+            </Tooltip>
+            <Tooltip title="Next Picture">
+              <Button variant="contained" onClick={handleNextMap}>
+                Next Map
+              </Button>
+            </Tooltip>
+          </ButtonGroup>
         </>
       ) : (
         <>
-          <button className={styles.topBtn} onClick={executeScrollToTop}>
-            Top
-          </button>
-          <button className={styles.submitBtn} onClick={handleSubmit}>
-            Submit
-          </button>
-          <button className={styles.bottomBtn} onClick={executeScrollToMap}>
-            Map
-          </button>
+          <ButtonGroup
+            className={styles.buttonGroup}
+            variant="contained"
+            aria-label="outlined primary button group"
+          >
+            <Tooltip title="Back to the picture">
+              <Button variant="contained" onClick={executeScrollToTop}>
+                Picture
+              </Button>
+            </Tooltip>
+            <Tooltip title="Submit your Answer">
+              <Button variant="contained" onClick={handleSubmit}>
+                Submit
+              </Button>
+            </Tooltip>
+            <Tooltip title="Show Map">
+              <Button variant="contained" onClick={executeScrollToMap}>
+                Map
+              </Button>
+            </Tooltip>
+          </ButtonGroup>
         </>
       )}
       {distanceRight === 1 ? (
         <>
-          <div className={styles.rightDiv}> You are Right</div>
+          <Alert
+            onClose={() => {}}
+            className={styles.alertBox}
+            severity="success"
+          >
+            You are Right!
+          </Alert>
         </>
       ) : distanceRight === 2 ? (
-        <div className={styles.wrongDiv}> You are Wrong</div>
+        <>
+          <Alert className={styles.alertBox} severity="error">
+            {/* <AlertTitle>Wrong Answer</AlertTitle> */}
+            Sorry! You are not in range.
+          </Alert>
+        </>
       ) : distanceRight === 3 ? (
-        <div className={styles.noinputDiv}>
-          Set a Marker on the map before you Submit
-        </div>
+        <>
+          <AlertTitle>
+            <Alert className={styles.alertBox} severity="info">
+              Set a Marker on the map before you Submit
+            </Alert>
+          </AlertTitle>
+
+          <div className={styles.noinputDiv}>
+            Set a Marker on the map before you Submit
+          </div>
+        </>
       ) : null}
 
       <Head>
