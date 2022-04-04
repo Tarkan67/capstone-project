@@ -32,7 +32,6 @@ const Map = ({
   if (className) {
     mapClassName = `${mapClassName} ${className}`;
   }
-  console.log("map currentPicture");
   // Fix for issue between next js and react leaflet, without it no markers will show up on the map
   useEffect(() => {
     (async function init() {
@@ -64,13 +63,13 @@ const Map = ({
                   : null
               );
               const { lat, lng } = e.latlng;
-              if (clickCount === 0) {
+              if (clickCount === 0 && !checkAnswer) {
                 setClickCount(clickCount + 1);
                 markerStore ? map.removeLayer(markerStore) : null;
                 setMarkerStore(
                   L.marker([lat, lng], { Icon }).addTo(layerGroup)
                 );
-              } else if (clickCount === 1) {
+              } else if (clickCount === 1 && !checkAnswer) {
                 setClickCount(clickCount - 1);
                 markerStore ? map.removeLayer(markerStore) : null;
                 setMarkerStore(
@@ -81,7 +80,6 @@ const Map = ({
           });
 
           if (checkAnswer && markerStore) {
-            console.log(markerStore);
             L.polyline(
               [
                 [currentPicture.LatLng.lat, currentPicture.LatLng.lng],
@@ -89,7 +87,6 @@ const Map = ({
               ],
               { color: "red" }
             ).addTo(layerGroup);
-            setCheckAnswer(false);
           } else {
             null;
           }
@@ -99,6 +96,7 @@ const Map = ({
               setMarkerStore() &
               setDistance() &
               setClearMap(false);
+            setCheckAnswer(false);
           } else {
             null;
           }
