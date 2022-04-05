@@ -36,6 +36,8 @@ export default function Home({
   setLatLng,
   layerGroup,
   setLayerGroup,
+  expandMap,
+  setExpandMap,
 }) {
   const myRefMap = useRef(null);
   const executeScrollToMap = () => myRefMap.current.scrollIntoView();
@@ -69,8 +71,19 @@ export default function Home({
     }
   }
 
+  function handleExpandMap() {
+    // document.documentElement.style.setProperty("--map-width", "80vw");
+    // document.documentElement.style.setProperty("--map-height", "80vw");
+    setExpandMap({ height: "90vh", width: "90vw" });
+    console.log(expandMap);
+  }
+
   return (
-    <div className={styles.relativeBox}>
+    <main className={styles.mainGridContainer}>
+      <Head>
+        <title>Elden Guesser</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <LoginButton />
       {distanceRight ? (
         <>
@@ -109,7 +122,7 @@ export default function Home({
               </Button>
             </Tooltip>
             <Tooltip title="Show Map">
-              <Button variant="contained" onClick={executeScrollToMap}>
+              <Button variant="contained" onClick={handleExpandMap}>
                 Map
               </Button>
             </Tooltip>
@@ -137,12 +150,7 @@ export default function Home({
           </AlertTitle>
         </>
       ) : null}
-
-      <Head>
-        <title>Elden Guesser</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <div ref={myRefTop}>
+      <div ref={myRefTop} className={styles.imageContainer}>
         <Image
           src={
             currentPicture
@@ -150,13 +158,14 @@ export default function Home({
               : locations[randomInteger(4)].path
           }
           alt="First Picture"
-          width="2160"
-          height="1215"
-          className={styles.overlay}
+          layout="fill"
+          className={styles.image}
         />
       </div>
-      <div ref={myRefMap}>
+      <div ref={myRefMap} className={styles.mapContainer}>
         <Map
+          expandMap={expandMap}
+          setExpandMap={setExpandMap}
           clickCount={clickCount}
           setClickCount={setClickCount}
           latLng={latLng}
@@ -173,9 +182,13 @@ export default function Home({
           setCurrentPicture={setCurrentPicture}
           clearMap={clearMap}
           setClearMap={setClearMap}
-          className={styles.homeMap}
+          className={styles.mapContainer}
           center={[40.5, 100.5]}
           zoom={3}
+          style={{
+            width: expandMap.height,
+            height: expandMap.width,
+          }}
         >
           {(
             { TileLayer, Marker, Popup, useMap, ImageOverlay, Polyline },
@@ -196,7 +209,7 @@ export default function Home({
           )}
         </Map>
       </div>
-    </div>
+    </main>
   );
 }
 export async function getServerSideProps(context) {

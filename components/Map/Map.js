@@ -5,7 +5,7 @@ import * as ReactLeaflet from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import rastercoords from "leaflet-rastercoords";
 import Icon from "../Icon/Icon";
-import styles from "./Map.module.css";
+import styles from "../../styles/Home.module.css";
 
 import iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
 import iconUrl from "leaflet/dist/images/marker-icon.png";
@@ -32,10 +32,14 @@ const Map = ({
   setLatLng,
   layerGroup,
   setLayerGroup,
+  expandMap,
+  setExpandMap,
   ...rest
 }) => {
   let mapClassName = styles.map;
-  if (className) {
+  if (className && !expandMap) {
+    mapClassName = `${mapClassName} ${className}`;
+  } else if (expandMap) {
     mapClassName = `${mapClassName} ${className}`;
   }
   // Fix for issue between next js and react leaflet, without it no markers will show up on the map
@@ -80,7 +84,15 @@ const Map = ({
     return null;
   }
   return (
-    <MapContainer className={mapClassName} {...rest} CRS={CRS.Simple}>
+    <MapContainer
+      className={mapClassName}
+      style={{
+        width: expandMap.height,
+        height: expandMap.width,
+      }}
+      {...rest}
+      CRS={CRS.Simple}
+    >
       <MyComponent />
       <MapConsumer>
         {(map) => {
@@ -117,6 +129,13 @@ const Map = ({
           }
           const rc = new rastercoords(map, [11011, 11716]);
           map.setMaxZoom(rc.zoomLevel());
+          if (!expandMap) {
+            const rc = new rastercoords(map, [11011, 11716]);
+            map.setMaxZoom(rc.zoomLevel());
+          } else {
+            const rc = new rastercoords(map, [11011, 11716]);
+            map.setMaxZoom(rc.zoomLevel());
+          }
           return children(ReactLeaflet, map, rc, latLng, distance);
         }}
       </MapConsumer>

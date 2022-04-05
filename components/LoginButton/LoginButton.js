@@ -1,31 +1,24 @@
 import { Button } from "@mui/material";
 import { useSession, signIn, signOut } from "next-auth/react";
+import styles from "../../styles/Home.module.css";
 
 export default function LoginButton() {
   const { data: session } = useSession();
   if (session) {
     return (
-      <div
-        style={{
-          display: "flex",
-          alignItems: "baseline",
-          justifyContent: "space-between",
-        }}
-      >
-        <span>Signed in as {session.user.name}</span>
-        <Button onClick={() => signOut()}>Sign out</Button>
-      </div>
+      <>
+        {/* <span>Signed in as {session.user.name}</span> */}
+        <Button onClick={() => signOut()} className={styles.loginContainer}>
+          Sign out
+        </Button>
+      </>
     );
   }
   return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "baseline",
-        justifyContent: "space-between",
-      }}
-    >
-      <Button onClick={() => signIn()}>Sign in</Button>
+    <div>
+      <Button onClick={() => signIn()} className={styles.loginContainer}>
+        Sign in
+      </Button>
     </div>
   );
 }

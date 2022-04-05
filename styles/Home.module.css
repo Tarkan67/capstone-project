@@ -115,30 +115,63 @@
   }
 }
 
-.homeMap {
+.mainGridContainer {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 5vh 5vh 2fr;
   height: 100vh;
-  margin: 0;
-  position: absolute;
-  z-index: 10;
+  /* grid-template-columns: auto; */
 }
 
-.buttonGroup {
+.imageContainer {
+  width: 100vw;
+  z-index: 1;
+  /* position: unset !important; */
+}
+.image {
+  object-fit: contain;
+  width: 100vw;
+  z-index: 1;
+  /* position: relative !important; */
+}
+
+.alertBox {
   position: fixed;
+  top: 50vh;
+  right: vw;
+  z-index: 12;
+}
+
+.mapContainer {
+  /* top: 11vh;
+  left: 2vw; */
+  z-index: 15;
+  position: absolute;
+}
+.mapContainerExtended {
+  /* height: var(--map-height);
+  width: var(--map-width); */
+  z-index: 15;
+  justify-self: end;
+}
+
+/* .mapExtended {
+  width: 100vw;
+  height: 100vh;
+} */
+.buttonGroup {
+  /* position: fixed; */
+  justify-self: center;
   top: 6vh;
   right: 42vw;
   z-index: 12;
 }
-.alertBox {
-  position: fixed;
-  top: 50vh;
-  right: 45vw;
-  z-index: 12;
-}
 
-.overlay {
-  position: absolute;
+.loginContainer {
+  width: 7vw;
+  top: 1vh;
+  left: 1vw;
   z-index: 10;
-}
-.relativeBox {
-  position: relative;
+  background-color: #a3884b;
+  color: white;
 }
