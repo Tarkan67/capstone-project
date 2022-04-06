@@ -24,7 +24,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
       },
     },
   });
-  const [expandMap, setExpandMap] = useState({ height: "30vh", width: "30vw" });
+  const [expandMap, setExpandMap] = useState(false);
   const [clickCount, setClickCount] = useState(0);
   const [latLng, setLatLng] = useState();
   const [layerGroup, setLayerGroup] = useState();

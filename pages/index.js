@@ -74,7 +74,7 @@ export default function Home({
   function handleExpandMap() {
     // document.documentElement.style.setProperty("--map-width", "80vw");
     // document.documentElement.style.setProperty("--map-height", "80vw");
-    setExpandMap({ height: "90vh", width: "90vw" });
+    setExpandMap(!expandMap);
     console.log(expandMap);
   }
 
@@ -162,7 +162,7 @@ export default function Home({
           className={styles.image}
         />
       </div>
-      <div ref={myRefMap} className={styles.mapContainer}>
+      <div ref={myRefMap}>
         <Map
           expandMap={expandMap}
           setExpandMap={setExpandMap}
@@ -182,13 +182,8 @@ export default function Home({
           setCurrentPicture={setCurrentPicture}
           clearMap={clearMap}
           setClearMap={setClearMap}
-          className={styles.mapContainer}
           center={[40.5, 100.5]}
           zoom={3}
-          style={{
-            width: expandMap.height,
-            height: expandMap.width,
-          }}
         >
           {(
             { TileLayer, Marker, Popup, useMap, ImageOverlay, Polyline },

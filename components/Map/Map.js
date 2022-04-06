@@ -1,16 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import { CRS } from "leaflet";
 import * as ReactLeaflet from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import rastercoords from "leaflet-rastercoords";
 import Icon from "../Icon/Icon";
-import styles from "../../styles/Home.module.css";
+import styles from "./Map.module.css";
 
 import iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
 import iconUrl from "leaflet/dist/images/marker-icon.png";
 import shadowUrl from "leaflet/dist/images/marker-shadow.png";
 import { getDistance } from "geolib";
+import { cx } from "@emotion/css";
+import { map } from "leaflet";
 
 const { MapContainer, MapConsumer } = ReactLeaflet;
 const Map = ({
@@ -36,12 +38,6 @@ const Map = ({
   setExpandMap,
   ...rest
 }) => {
-  let mapClassName = styles.map;
-  if (className && !expandMap) {
-    mapClassName = `${mapClassName} ${className}`;
-  } else if (expandMap) {
-    mapClassName = `${mapClassName} ${className}`;
-  }
   // Fix for issue between next js and react leaflet, without it no markers will show up on the map
   useEffect(() => {
     (async function init() {
@@ -83,63 +79,78 @@ const Map = ({
     });
     return null;
   }
+
+  const mapRef = useRef();
+
+  useEffect(() => {
+    // map
+    if (map.current) {
+      map.current.invalidateSize();
+    }
+  }, [expandMap]);
+
   return (
-    <MapContainer
-      className={mapClassName}
-      style={{
-        width: expandMap.height,
-        height: expandMap.width,
-      }}
-      {...rest}
-      CRS={CRS.Simple}
-    >
-      <MyComponent />
-      <MapConsumer>
-        {(map) => {
-          if (!layerGroup) {
-            handleLayerGroup();
-          }
-
-          if (checkAnswer && markerStore) {
-            L.polyline(
-              [
-                [currentPicture.LatLng.lat, currentPicture.LatLng.lng],
-                [markerStore._latlng.lat, markerStore._latlng.lng],
-              ],
-              { color: "red" }
-            ).addTo(layerGroup);
-          } else {
-            null;
-          }
-          function handleLayerGroup() {
-            setLayerGroup(L.layerGroup().addTo(map));
-          }
-          function handleClearMap() {
-            setMarkerStore();
-            setDistance();
-            setClearMap(false);
-            setCheckAnswer(false);
-          }
-
-          if (clearMap && markerStore) {
-            layerGroup.clearLayers();
-            handleClearMap();
-          } else {
-            null;
-          }
-          const rc = new rastercoords(map, [11011, 11716]);
-          map.setMaxZoom(rc.zoomLevel());
-          if (!expandMap) {
-            const rc = new rastercoords(map, [11011, 11716]);
-            map.setMaxZoom(rc.zoomLevel());
-          } else {
-            const rc = new rastercoords(map, [11011, 11716]);
-            map.setMaxZoom(rc.zoomLevel());
-          }
-          return children(ReactLeaflet, map, rc, latLng, distance);
+    <div className={cx(styles.map, { [styles.mapExpanded]: expandMap })}>
+      <MapContainer
+        className={styles.mapContainer}
+        // style={{
+        //   width: expandMap.height,
+        //   height: expandMap.width,
+        // }}
+        {...rest}
+        CRS={CRS.Simple}
+        whenCreated={(map) => {
+          mapRef.current = map;
         }}
-      </MapConsumer>
-    </MapContainer>
+      >
+        <MyComponent />
+        <MapConsumer>
+          {(map) => {
+            if (!layerGroup) {
+              handleLayerGroup();
+            }
+
+            if (checkAnswer && markerStore) {
+              L.polyline(
+                [
+                  [currentPicture.LatLng.lat, currentPicture.LatLng.lng],
+                  [markerStore._latlng.lat, markerStore._latlng.lng],
+                ],
+                { color: "red" }
+              ).addTo(layerGroup);
+            } else {
+              null;
+            }
+            function handleLayerGroup() {
+              setLayerGroup(L.layerGroup().addTo(map));
+            }
+            function handleClearMap() {
+              setMarkerStore();
+              setDistance();
+              setClearMap(false);
+              setCheckAnswer(false);
+            }
+
+            if (clearMap && markerStore) {
+              layerGroup.clearLayers();
+              handleClearMap();
+            } else {
+              null;
+            }
+            const rc = new rastercoords(map, [11011, 11716]);
+            map.setMaxZoom(rc.zoomLevel());
+            if (!expandMap) {
+              const rc = new rastercoords(map, [11011, 11716]);
+              map.setMaxZoom(rc.zoomLevel());
+            } else {
+              const rc = new rastercoords(map, [11011, 11716]);
+              map.setMaxZoom(rc.zoomLevel());
+            }
+            return children(ReactLeaflet, map, rc, latLng, distance);
+          }}
+        </MapConsumer>
+      </MapContainer>
+    </div>
   );
 };
 
