@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import L from "leaflet";
 import { CRS } from "leaflet";
 import * as ReactLeaflet from "react-leaflet";
@@ -11,6 +11,8 @@ import iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
 import iconUrl from "leaflet/dist/images/marker-icon.png";
 import shadowUrl from "leaflet/dist/images/marker-shadow.png";
 import { getDistance } from "geolib";
+import { cx } from "@emotion/css";
+import { map } from "leaflet";
 
 const { MapContainer, MapConsumer } = ReactLeaflet;
 const Map = ({
@@ -32,12 +34,10 @@ const Map = ({
   setLatLng,
   layerGroup,
   setLayerGroup,
+  expandMap,
+  setExpandMap,
   ...rest
 }) => {
-  let mapClassName = styles.map;
-  if (className) {
-    mapClassName = `${mapClassName} ${className}`;
-  }
   // Fix for issue between next js and react leaflet, without it no markers will show up on the map
   useEffect(() => {
     (async function init() {
@@ -50,6 +50,7 @@ const Map = ({
       });
     })();
   }, []);
+
   function MyComponent() {
     const map = ReactLeaflet.useMapEvents({
       click: (e) => {
@@ -79,48 +80,65 @@ const Map = ({
     });
     return null;
   }
+  const mapRef = useRef();
+
+  useEffect(() => {
+    if (map.current) {
+      map.current.invalidateSize();
+    }
+  }, [expandMap]);
+
   return (
-    <MapContainer className={mapClassName} {...rest} CRS={CRS.Simple}>
-      <MyComponent />
-      <MapConsumer>
-        {(map) => {
-          if (!layerGroup) {
-            handleLayerGroup();
-          }
-
-          if (checkAnswer && markerStore) {
-            L.polyline(
-              [
-                [currentPicture.LatLng.lat, currentPicture.LatLng.lng],
-                [markerStore._latlng.lat, markerStore._latlng.lng],
-              ],
-              { color: "red" }
-            ).addTo(layerGroup);
-          } else {
-            null;
-          }
-          function handleLayerGroup() {
-            setLayerGroup(L.layerGroup().addTo(map));
-          }
-          function handleClearMap() {
-            setMarkerStore();
-            setDistance();
-            setClearMap(false);
-            setCheckAnswer(false);
-          }
-
-          if (clearMap && markerStore) {
-            layerGroup.clearLayers();
-            handleClearMap();
-          } else {
-            null;
-          }
-          const rc = new rastercoords(map, [11011, 11716]);
-          map.setMaxZoom(rc.zoomLevel());
-          return children(ReactLeaflet, map, rc, latLng, distance);
+    <div className={cx(styles.map, { [styles.mapExpanded]: expandMap })}>
+      <MapContainer
+        className={styles.mapContainer}
+        {...rest}
+        CRS={CRS.Simple}
+        whenCreated={(map) => {
+          mapRef.current = map;
         }}
-      </MapConsumer>
-    </MapContainer>
+      >
+        <MyComponent />
+        <MapConsumer>
+          {(map) => {
+            if (!layerGroup) {
+              handleLayerGroup();
+            }
+
+            if (checkAnswer && markerStore) {
+              L.polyline(
+                [
+                  [currentPicture.LatLng.lat, currentPicture.LatLng.lng],
+                  [markerStore._latlng.lat, markerStore._latlng.lng],
+                ],
+                { color: "red" }
+              ).addTo(layerGroup);
+            } else {
+              null;
+            }
+            function handleLayerGroup() {
+              setLayerGroup(L.layerGroup().addTo(map));
+            }
+            function handleClearMap() {
+              setMarkerStore();
+              setDistance();
+              setClearMap(false);
+              setCheckAnswer(false);
+            }
+
+            if (clearMap && markerStore) {
+              layerGroup.clearLayers();
+              handleClearMap();
+            } else {
+              null;
+            }
+            const rc = new rastercoords(map, [11011, 11716]);
+            map.setMaxZoom(rc.zoomLevel());
+            return children(ReactLeaflet, map, rc, latLng, distance);
+          }}
+        </MapConsumer>
+      </MapContainer>
+    </div>
   );
 };
 

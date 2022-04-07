@@ -24,6 +24,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
       },
     },
   });
+  const [expandMap, setExpandMap] = useState(false);
   const [clickCount, setClickCount] = useState(0);
   const [latLng, setLatLng] = useState();
   const [layerGroup, setLayerGroup] = useState();
@@ -48,6 +49,8 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
           >
             <Component
               {...pageProps}
+              expandMap={expandMap}
+              setExpandMap={setExpandMap}
               clickCount={clickCount}
               setClickCount={setClickCount}
               latLng={latLng}
