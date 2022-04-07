@@ -83,8 +83,9 @@ const Map = ({
   const mapRef = useRef();
 
   useEffect(() => {
-    if (map.current) {
-      map.current.invalidateSize();
+    console.log(mapRef.current, expandMap);
+    if (mapRef.current) {
+      mapRef.current.invalidateSize();
     }
   }, [expandMap]);
 

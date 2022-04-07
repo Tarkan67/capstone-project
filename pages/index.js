@@ -2,8 +2,21 @@ import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import LoginButton from "../components/LoginButton/LoginButton";
 import Link from "next/link";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
-export default function Home({ currentPicture }) {
+export default function Home() {
+  const router = useRouter();
+  useEffect(() => {
+    function handleKeyPress() {
+      router.push("/game");
+    }
+    window.addEventListener("keydown", handleKeyPress);
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+  }, []);
+
   return (
     <Link href="/game" className={styles.mainGridContainer}>
       <div className={styles.mainGridContainer}>
