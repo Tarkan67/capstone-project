@@ -14,7 +14,10 @@ export default function Home({ currentPicture }) {
         </Head>
 
         <video autoPlay loop muted className={styles.video} id="video">
-          <source src="/videos/Landingpage.mp4" type="video/mp4" />
+          <source
+            src="https://res.cloudinary.com/dbqtg5phf/video/upload/v1649319479/Untitled_dorpsq.mp4"
+            type="video/mp4"
+          />
         </video>
       </div>
     </Link>
