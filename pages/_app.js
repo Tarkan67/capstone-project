@@ -6,7 +6,6 @@ import locations from "../db/location";
 import "../styles/globals.css";
 import { createTheme } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
-// import * as ReactLeaflet from "react-leaflet";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   const theme = createTheme({

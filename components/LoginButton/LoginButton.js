@@ -1,19 +1,12 @@
 import { Button } from "@mui/material";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
+import ProfileOverlay from "../ProfileOverlay/ProfileOverlay";
 import styles from "./LoginButton.module.css";
 
 export default function LoginButton() {
   const { data: session } = useSession();
   if (session) {
-    return (
-      <Button
-        variant="contained"
-        onClick={() => signOut()}
-        className={styles.loginButton}
-      >
-        Sign out
-      </Button>
-    );
+    return <ProfileOverlay></ProfileOverlay>;
   }
   return (
     <Button

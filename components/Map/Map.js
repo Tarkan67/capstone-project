@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 import L from "leaflet";
 import { CRS } from "leaflet";
 import * as ReactLeaflet from "react-leaflet";
@@ -12,7 +12,6 @@ import iconUrl from "leaflet/dist/images/marker-icon.png";
 import shadowUrl from "leaflet/dist/images/marker-shadow.png";
 import { getDistance } from "geolib";
 import { cx } from "@emotion/css";
-import { map } from "leaflet";
 
 const { MapContainer, MapConsumer } = ReactLeaflet;
 const Map = ({
