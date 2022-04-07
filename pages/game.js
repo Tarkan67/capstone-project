@@ -13,9 +13,7 @@ import { Alert, AlertTitle, ButtonGroup, Tooltip } from "@mui/material";
 
 const MapEffect = ({ useMap }) => {
   const map = useMap();
-  useEffect(() => {
-    console.log("map", { map });
-  }, [map]);
+  useEffect(() => {}, [map]);
 
   return null;
 };
@@ -36,9 +34,9 @@ export default function Game({
   setLatLng,
   layerGroup,
   setLayerGroup,
+  expandMap,
+  setExpandMap,
 }) {
-  const myRefMap = useRef(null);
-  const executeScrollToMap = () => myRefMap.current.scrollIntoView();
   const myRefTop = useRef(null);
   const executeScrollToTop = () => myRefTop.current.scrollIntoView();
 
@@ -69,8 +67,13 @@ export default function Game({
     }
   }
 
+  function handleExpandMap() {
+    setExpandMap(!expandMap);
+    console.log(expandMap);
+  }
+
   return (
-    <div className={styles.relativeBox}>
+    <div className={styles.mainGridContainer}>
       <LoginButton />
       {distanceRight ? (
         <>
@@ -109,7 +112,7 @@ export default function Game({
               </Button>
             </Tooltip>
             <Tooltip title="Show Map">
-              <Button variant="contained" onClick={executeScrollToMap}>
+              <Button variant="contained" onClick={handleExpandMap}>
                 Map
               </Button>
             </Tooltip>
@@ -140,9 +143,8 @@ export default function Game({
 
       <Head>
         <title>Elden Guesser</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div ref={myRefTop}>
+      <div ref={myRefTop} className={styles.imageContainer}>
         <Image
           src={
             currentPicture
@@ -150,13 +152,14 @@ export default function Game({
               : locations[randomInteger(4)].path
           }
           alt="First Picture"
-          width="2160"
-          height="1215"
-          className={styles.overlay}
+          layout="fill"
+          className={styles.image}
         />
       </div>
-      <div ref={myRefMap}>
+      <div>
         <Map
+          expandMap={expandMap}
+          setExpandMap={setExpandMap}
           clickCount={clickCount}
           setClickCount={setClickCount}
           latLng={latLng}
@@ -173,7 +176,6 @@ export default function Game({
           setCurrentPicture={setCurrentPicture}
           clearMap={clearMap}
           setClearMap={setClearMap}
-          className={styles.homeMap}
           center={[40.5, 100.5]}
           zoom={3}
         >
