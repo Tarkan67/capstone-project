@@ -57,6 +57,7 @@ export default function Game({
     executeScrollToTop();
     setCurrentPicture(locations[randomInteger(4)]);
     setClearMap(true);
+    setExpandMap(false);
   }
 
   function handleCheckAnswer() {
@@ -69,7 +70,6 @@ export default function Game({
 
   function handleExpandMap() {
     setExpandMap(!expandMap);
-    console.log(expandMap);
   }
 
   return (
@@ -101,11 +101,6 @@ export default function Game({
             variant="contained"
             aria-label="outlined primary button group"
           >
-            <Tooltip title="Back to the picture">
-              <Button variant="contained" onClick={executeScrollToTop}>
-                Picture
-              </Button>
-            </Tooltip>
             <Tooltip title="Submit your Answer">
               <Button variant="contained" onClick={handleSubmit}>
                 Submit
