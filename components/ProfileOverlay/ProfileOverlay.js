@@ -29,7 +29,7 @@ export default function ProfileOverlay() {
               }}
             >
               <Avatar
-                alt="You"
+                alt="Github-Profile-Image"
                 src={session.user.image}
                 className={styles.Avatar}
               ></Avatar>
