@@ -23,6 +23,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
       },
     },
   });
+  const [player, setPlayer] = useState();
   const [expandMap, setExpandMap] = useState(false);
   const [clickCount, setClickCount] = useState(0);
   const [latLng, setLatLng] = useState();
@@ -48,6 +49,8 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
           >
             <Component
               {...pageProps}
+              player={player}
+              setPlayer={setPlayer}
               expandMap={expandMap}
               setExpandMap={setExpandMap}
               clickCount={clickCount}

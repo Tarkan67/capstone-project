@@ -1,0 +1,7 @@
+.PointsDisplay {
+  z-index: 10;
+  display: absolute;
+  left: 92.5vw;
+  top: 1vh;
+  width: 7vw;
+}

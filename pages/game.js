@@ -7,9 +7,10 @@ import styles from "../styles/Home.module.css";
 import locations from "../db/location";
 import randomInteger from "random-int";
 import LoginButton from "../components/LoginButton/LoginButton";
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import Button from "@mui/material/Button";
 import { Alert, AlertTitle, ButtonGroup, Tooltip } from "@mui/material";
+import PointsDisplay from "../components/PointsDisplay/PointsDisplay";
 
 const MapEffect = ({ useMap }) => {
   const map = useMap();
@@ -36,11 +37,13 @@ export default function Game({
   setLayerGroup,
   expandMap,
   setExpandMap,
+  player,
+  setPlayer,
 }) {
   const myRefTop = useRef(null);
   const executeScrollToTop = () => myRefTop.current.scrollIntoView();
-
   const [distanceRight, setDistanceRight] = useState();
+  const { data: session } = useSession();
 
   function handleSubmit() {
     if (distance < 500) {
@@ -48,8 +51,23 @@ export default function Game({
     } else if (distance === undefined) {
       setDistanceRight(3);
     } else {
+      handlePoints();
       setDistanceRight(2);
     }
+  }
+
+  async function handlePoints() {
+    console.log("handle", player._id);
+
+    const response = await fetch(`/api/player/${player._id}`, {
+      method: "PATCH",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        points: player.points + 5,
+      }),
+    });
+    const data = await response.json();
+    console.log("data", data);
   }
 
   function handleNextMap() {
@@ -74,7 +92,8 @@ export default function Game({
 
   return (
     <div className={styles.mainGridContainer}>
-      <LoginButton />
+      <PointsDisplay player={player} setPlayer={setPlayer} />
+      <LoginButton player={player} setPlayer={setPlayer} />
       {distanceRight ? (
         <>
           <ButtonGroup
