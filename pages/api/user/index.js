@@ -1,6 +1,6 @@
 import { getSession } from "next-auth/react";
 import { connectDb } from "../../../utils/db";
-import Player from "../../../schema/Player";
+import User from "../../../schema/User";
 
 export default async function handler(request, response) {
   try {
@@ -11,7 +11,7 @@ export default async function handler(request, response) {
     switch (request.method) {
       case "GET":
         if (session) {
-          let players = await Player.find()
+          let players = await User.find()
             .sort({ createdAt: -1 })
             .limit(100)
             .where({ userId: session.user.id });
@@ -24,7 +24,7 @@ export default async function handler(request, response) {
 
       case "POST":
         if (session) {
-          const createdPlayer = await Player.create({
+          const createdPlayer = await User.create({
             ...request.body,
             userId: session.user.id,
           });
@@ -35,7 +35,7 @@ export default async function handler(request, response) {
         break;
 
       case "PATCH":
-        const updatedPlayer = await Player.findByIdAndUpdate(
+        const updatedPlayer = await User.findByIdAndUpdate(
           playerId,
           {
             $set: request.body,

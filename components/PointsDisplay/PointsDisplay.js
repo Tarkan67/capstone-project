@@ -3,7 +3,7 @@ import { useSession } from "next-auth/react";
 import useSWR from "swr";
 import styles from "./PointsDisplay.module.css";
 
-export default function PointsDisplay({ player, setPlayer }) {
+export default function PointsDisplay() {
   const { data: session } = useSession();
 
   const { data: user } = useSWR(`/api/user/${session?.user.id}`, {
