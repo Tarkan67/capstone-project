@@ -119,7 +119,7 @@ export default function Game({
       ) : (
         <>
           <ButtonGroup
-            className={styles.buttonGroup}
+            className={styles.buttonGroupSubmit}
             variant="contained"
             aria-label="outlined primary button group"
           >

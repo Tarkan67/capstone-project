@@ -1,7 +1,13 @@
 .buttonGroup {
   position: fixed;
   top: 6vh;
-  right: 42vw;
+  right: 42.8vw;
+  z-index: 12;
+}
+.buttonGroupSubmit {
+  position: fixed;
+  top: 6vh;
+  right: 46.7vw;
   z-index: 12;
 }
 .alertBox {
