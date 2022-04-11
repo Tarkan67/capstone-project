@@ -11,6 +11,7 @@ import { getSession, useSession } from "next-auth/react";
 import Button from "@mui/material/Button";
 import { Alert, AlertTitle, ButtonGroup, Tooltip } from "@mui/material";
 import PointsDisplay from "../components/PointsDisplay/PointsDisplay";
+import useSWR from "swr";
 
 const MapEffect = ({ useMap }) => {
   const map = useMap();
@@ -37,11 +38,7 @@ export default function Game({
   setLayerGroup,
   expandMap,
   setExpandMap,
-  player,
-  setPlayer,
 }) {
-  const myRefTop = useRef(null);
-  const executeScrollToTop = () => myRefTop.current.scrollIntoView();
   const [distanceRight, setDistanceRight] = useState();
   const { data: session } = useSession();
 
@@ -56,18 +53,25 @@ export default function Game({
     }
   }
 
-  async function handlePoints() {
-    console.log("handle", player._id);
+  const { mutate, data: user } = useSWR(`/api/user/${session?.user.id}`, {
+    isPaused: () => !session?.user.id,
+  });
 
-    const response = await fetch(`/api/player/${player._id}`, {
-      method: "PATCH",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        points: player.points + 5,
-      }),
-    });
-    const data = await response.json();
-    console.log("data", data);
+  function handlePoints() {
+    mutate(
+      async () => {
+        const response = await fetch(`/api/user/${session?.user.id}`, {
+          method: "PATCH",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            $inc: { points: 5 },
+          }),
+        });
+        const data = await response.json();
+        console.log("data", data);
+      },
+      { optimisticData: { ...user, points: user.points + 5 } }
+    );
   }
 
   function handleNextMap() {
@@ -92,8 +96,8 @@ export default function Game({
 
   return (
     <div className={styles.mainGridContainer}>
-      <PointsDisplay player={player} setPlayer={setPlayer} />
-      <LoginButton player={player} setPlayer={setPlayer} />
+      <PointsDisplay />
+      <LoginButton />
       {distanceRight ? (
         <>
           <ButtonGroup
@@ -158,7 +162,7 @@ export default function Game({
       <Head>
         <title>Elden Guesser</title>
       </Head>
-      <div ref={myRefTop} className={styles.imageContainer}>
+      <div className={styles.imageContainer}>
         <Image
           src={
             currentPicture

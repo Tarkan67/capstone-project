@@ -23,7 +23,6 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
       },
     },
   });
-  const [player, setPlayer] = useState();
   const [expandMap, setExpandMap] = useState(false);
   const [clickCount, setClickCount] = useState(0);
   const [latLng, setLatLng] = useState();
@@ -44,13 +43,11 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
             value={{
               fetcher: (resource, init) =>
                 fetch(resource, init).then((res) => res.json()),
-              refreshInterval: 3000,
+              refreshInterval: 30000,
             }}
           >
             <Component
               {...pageProps}
-              player={player}
-              setPlayer={setPlayer}
               expandMap={expandMap}
               setExpandMap={setExpandMap}
               clickCount={clickCount}

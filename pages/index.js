@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 
-export default function Home({ player, setPlayer }) {
+export default function Home() {
   const router = useRouter();
   useEffect(() => {
     function handleKeyPress() {
@@ -20,7 +20,7 @@ export default function Home({ player, setPlayer }) {
   return (
     <Link href="/game" className={styles.mainGridContainer}>
       <div className={styles.mainGridContainer}>
-        <LoginButton player={player} setPlayer={setPlayer} />
+        <LoginButton />
         <Head>
           <title>Elden Guesser</title>
           <link rel="icon" href="/favicon.ico" />
