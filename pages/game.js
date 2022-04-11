@@ -74,9 +74,8 @@ export default function Game({
     );
   }
 
-  function handleNextMap() {
+  function handleNextPicture() {
     setDistanceRight(undefined);
-    executeScrollToTop();
     setCurrentPicture(locations[randomInteger(4)]);
     setClearMap(true);
     setExpandMap(false);
@@ -105,14 +104,14 @@ export default function Game({
             variant="contained"
             aria-label="outlined primary button group"
           >
-            <Tooltip title="Right answer will be shown.">
+            <Tooltip title="Right answer will be shown">
               <Button variant="contained" onClick={handleCheckAnswer}>
                 Check Answer
               </Button>
             </Tooltip>
             <Tooltip title="Next Picture">
-              <Button variant="contained" onClick={handleNextMap}>
-                Next Map
+              <Button variant="contained" onClick={handleNextPicture}>
+                Next Picture
               </Button>
             </Tooltip>
           </ButtonGroup>
@@ -146,7 +145,7 @@ export default function Game({
       ) : distanceRight === 2 ? (
         <>
           <Alert className={styles.alertBox} severity="error">
-            Sorry! You are not in range.
+            Sorry! You are not in range
           </Alert>
         </>
       ) : distanceRight === 3 ? (
