@@ -5,6 +5,7 @@ import styles from "./LoginButton.module.css";
 
 export default function LoginButton() {
   const { data: session } = useSession();
+
   if (session) {
     return <ProfileOverlay></ProfileOverlay>;
   }
