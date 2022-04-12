@@ -1,7 +1,6 @@
 .loginButton {
   z-index: 10;
-  display: absolute;
-  left: 0.5vw;
-  top: 1vh;
+  grid-row: 1 / 1;
   width: 7vw;
+  position: absolute;
 }

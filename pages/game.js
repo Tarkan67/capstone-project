@@ -12,6 +12,7 @@ import Button from "@mui/material/Button";
 import { Alert, AlertTitle, ButtonGroup, Tooltip } from "@mui/material";
 import PointsDisplay from "../components/PointsDisplay/PointsDisplay";
 import useSWR from "swr";
+import LeaderBoardButton from "../components/LeaderBoardButton/LeaderBoardButton";
 
 const MapEffect = ({ useMap }) => {
   const map = useMap();
@@ -45,6 +46,7 @@ export default function Game({
   function handleSubmit() {
     if (distance < 500) {
       setDistanceRight(1);
+      handlePoints();
     } else if (distance === undefined) {
       setDistanceRight(3);
     } else {
@@ -70,7 +72,7 @@ export default function Game({
         const data = await response.json();
         console.log("data", data);
       },
-      { optimisticData: { ...user, points: user.points + 5 } }
+      { optimisticData: { ...user, points: user?.points + 5 } }
     );
   }
 
@@ -94,48 +96,71 @@ export default function Game({
   }
 
   return (
-    <div className={styles.mainGridContainer}>
-      <PointsDisplay />
-      <LoginButton />
-      {distanceRight ? (
-        <>
-          <ButtonGroup
-            className={styles.buttonGroup}
-            variant="contained"
-            aria-label="outlined primary button group"
-          >
-            <Tooltip title="Right answer will be shown">
-              <Button variant="contained" onClick={handleCheckAnswer}>
-                Check Answer
-              </Button>
-            </Tooltip>
-            <Tooltip title="Next Picture">
-              <Button variant="contained" onClick={handleNextPicture}>
-                Next Picture
-              </Button>
-            </Tooltip>
-          </ButtonGroup>
-        </>
-      ) : (
-        <>
-          <ButtonGroup
-            className={styles.buttonGroupSubmit}
-            variant="contained"
-            aria-label="outlined primary button group"
-          >
-            <Tooltip title="Submit your Answer">
-              <Button variant="contained" onClick={handleSubmit}>
-                Submit
-              </Button>
-            </Tooltip>
-            <Tooltip title="Show Map">
-              <Button variant="contained" onClick={handleExpandMap}>
-                Map
-              </Button>
-            </Tooltip>
-          </ButtonGroup>
-        </>
-      )}
+    <>
+      <div className={styles.mainFlexContainer}>
+        <LoginButton />
+        <div className={styles.LeaderBoardButtonFlexContainer}>
+          <LeaderBoardButton />
+          <PointsDisplay />
+        </div>
+      </div>
+      <div className={styles.mainFlexContainerSecond}>
+        {distanceRight ? (
+          <>
+            <ButtonGroup
+              className={styles.buttonGroup}
+              variant="contained"
+              aria-label="outlined primary button group"
+            >
+              <Tooltip title="Right answer will be shown">
+                <Button
+                  variant="contained"
+                  onClick={handleCheckAnswer}
+                  className={styles.button}
+                >
+                  Check Answer
+                </Button>
+              </Tooltip>
+              <Tooltip title="Next Picture">
+                <Button
+                  variant="contained"
+                  onClick={handleNextPicture}
+                  className={styles.button}
+                >
+                  Next Picture
+                </Button>
+              </Tooltip>
+            </ButtonGroup>
+          </>
+        ) : (
+          <>
+            <ButtonGroup
+              className={styles.buttonGroupSubmit}
+              variant="contained"
+              aria-label="outlined primary button group"
+            >
+              <Tooltip title="Submit your Answer">
+                <Button
+                  variant="contained"
+                  onClick={handleSubmit}
+                  className={styles.button}
+                >
+                  Submit
+                </Button>
+              </Tooltip>
+              <Tooltip title="Show Map">
+                <Button
+                  variant="contained"
+                  onClick={handleExpandMap}
+                  className={styles.button}
+                >
+                  Map
+                </Button>
+              </Tooltip>
+            </ButtonGroup>
+          </>
+        )}
+      </div>
       {distanceRight === 1 ? (
         <>
           <Alert className={styles.alertBox} severity="success">
@@ -215,7 +240,7 @@ export default function Game({
           )}
         </Map>
       </div>
-    </div>
+    </>
   );
 }
 export async function getServerSideProps(context) {
