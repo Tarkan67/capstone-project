@@ -1,8 +1,13 @@
 .buttonGroup {
-  position: fixed;
-  top: 6vh;
-  right: 42vw;
-  z-index: 12;
+  display: flex;
+  z-index: 10;
+}
+.buttonGroupSubmit {
+  display: flex;
+  z-index: 10;
+}
+.button {
+  font-size: 1em;
 }
 .alertBox {
   position: fixed;
@@ -11,12 +16,12 @@
   z-index: 16;
 }
 .imageContainer {
+  object-fit: cover;
   width: 100vw;
   z-index: 1;
 }
 .image {
   object-fit: contain;
-  width: 100vw;
   z-index: 1;
 }
 .video {
@@ -26,12 +31,24 @@
   position: fixed;
   z-index: -1;
 }
-.mainGridContainer {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 5vh 5vh 2fr;
-  height: 100vh;
-  margin: 0;
-  position: absolute;
+.mainFlexContainer {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  padding: 10px;
   z-index: 10;
+  justify-content: space-between;
+}
+.mainFlexContainerSecond {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  z-index: 10;
+  justify-content: center;
+}
+
+.LeaderBoardButtonFlexContainer {
+  display: flex;
+  gap: 10px;
 }
