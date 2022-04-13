@@ -9,10 +9,18 @@ import randomInteger from "random-int";
 import LoginButton from "../components/LoginButton/LoginButton";
 import { getSession, useSession } from "next-auth/react";
 import Button from "@mui/material/Button";
-import { Alert, AlertTitle, ButtonGroup, Tooltip } from "@mui/material";
+import {
+  Alert,
+  AlertTitle,
+  ButtonGroup,
+  Collapse,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
 import PointsDisplay from "../components/PointsDisplay/PointsDisplay";
 import useSWR from "swr";
 import LeaderBoardButton from "../components/LeaderBoardButton/LeaderBoardButton";
+import { Box } from "@mui/system";
 
 const MapEffect = ({ useMap }) => {
   const map = useMap();
@@ -41,14 +49,17 @@ export default function Game({
   setExpandMap,
 }) {
   const [distanceRight, setDistanceRight] = useState();
+  const [open, setOpen] = useState(true);
   const { data: session } = useSession();
   console.log(distance);
+
   function handleSubmit() {
     if (distance < 1000) {
       setDistanceRight(1);
       handlePoints();
     } else if (distance === undefined) {
       setDistanceRight(3);
+      setOpen(true);
     } else {
       setDistanceRight(2);
     }
@@ -109,7 +120,7 @@ export default function Game({
         </div>
       </div>
       <div className={styles.mainFlexContainerSecond}>
-        {distanceRight ? (
+        {distanceRight == 1 || distanceRight == 2 ? (
           <>
             <ButtonGroup
               className={styles.buttonGroup}
@@ -181,11 +192,27 @@ export default function Game({
         </>
       ) : distanceRight === 3 ? (
         <>
-          <AlertTitle>
-            <Alert className={styles.alertBox} severity="info">
-              Set a Marker on the map before you Submit
+          <Collapse in={open}>
+            <Alert
+              severity="info"
+              className={styles.alertBox}
+              action={
+                <IconButton
+                  aria-label="close"
+                  color="inherit"
+                  size="small"
+                  onClick={() => {
+                    setOpen(false);
+                  }}
+                >
+                  X
+                </IconButton>
+              }
+              sx={{ mb: 2 }}
+            >
+              Close me!
             </Alert>
-          </AlertTitle>
+          </Collapse>
         </>
       ) : null}
 

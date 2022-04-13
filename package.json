@@ -15,7 +15,6 @@
     "@mui/material": "^5.5.3",
     "@next-auth/mongodb-adapter": "^1.0.3",
     "auth": "^0.0.9",
-    "geolib": "^3.3.3",
     "leaflet": "^1.7.1",
     "leaflet-rastercoords": "^1.0.4",
     "material-ui-popup-state": "^2.0.0",

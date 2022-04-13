@@ -59,15 +59,11 @@ const Map = ({
           setClickCount(clickCount);
         }
         function handleDistance(marker) {
-          console.log(
-            "marker",
-            marker,
-            setDistance(
-              map.distance(
-                [marker._latlng.lat, marker._latlng.lng],
-                [currentPicture.LatLng.lat, currentPicture.LatLng.lng]
-              ) / 1000
-            )
+          setDistance(
+            map.distance(
+              [marker._latlng.lat, marker._latlng.lng],
+              [currentPicture.LatLng.lat, currentPicture.LatLng.lng]
+            ) / 1000
           );
         }
         setLatLng(e.latlng);
@@ -90,7 +86,6 @@ const Map = ({
     return null;
   }
   useEffect(() => {
-    console.log(mapRef.current, expandMap);
     if (mapRef.current) {
       mapRef.current.invalidateSize();
     }
@@ -99,7 +94,6 @@ const Map = ({
   const mapRef = useRef();
 
   useEffect(() => {
-    console.log(mapRef.current, expandMap);
     if (mapRef.current) {
       mapRef.current.invalidateSize();
     }
@@ -123,16 +117,14 @@ const Map = ({
             }
 
             if (checkAnswer && markerStore) {
-              console.log(
-                "polyline",
+              "polyline",
                 L.polyline(
                   [
                     [currentPicture.LatLng.lat, currentPicture.LatLng.lng],
                     [markerStore._latlng.lat, markerStore._latlng.lng],
                   ],
                   { color: "red" }
-                ).addTo(layerGroup)
-              );
+                ).addTo(layerGroup);
             } else {
               null;
             }
