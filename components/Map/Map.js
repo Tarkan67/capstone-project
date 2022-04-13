@@ -10,7 +10,6 @@ import styles from "./Map.module.css";
 import iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
 import iconUrl from "leaflet/dist/images/marker-icon.png";
 import shadowUrl from "leaflet/dist/images/marker-shadow.png";
-import { getDistance } from "geolib";
 import { cx } from "@emotion/css";
 
 const { MapContainer, MapConsumer } = ReactLeaflet;
@@ -56,29 +55,47 @@ const Map = ({
         function handleAddMarker(marker) {
           setMarkerStore(marker);
         }
-        function handleClickCount(value) {
-          setClickCount(clickCount + value);
+        function handleClickCount() {
+          setClickCount(clickCount);
+        }
+        function handleDistance(marker) {
+          console.log(
+            "marker",
+            marker,
+            setDistance(
+              map.distance(
+                [marker._latlng.lat, marker._latlng.lng],
+                [currentPicture.LatLng.lat, currentPicture.LatLng.lng]
+              ) / 1000
+            )
+          );
         }
         setLatLng(e.latlng);
-        setDistance(
-          latLng ? getDistance(latLng, currentPicture.LatLng, 100) / 100 : null
-        );
         const { lat, lng } = e.latlng;
         if (clickCount === 0 && !checkAnswer) {
-          handleClickCount(1);
+          handleClickCount(clickCount + 1);
           markerStore ? map.removeLayer(markerStore) : null;
           const marker = L.marker([lat, lng], { Icon }).addTo(layerGroup);
           handleAddMarker(marker);
+          handleDistance(marker);
         } else if (clickCount === 1 && !checkAnswer) {
-          handleClickCount(-1);
+          handleClickCount(clickCount - 1);
           markerStore ? map.removeLayer(markerStore) : null;
           const marker = L.marker([lat, lng], { Icon }).addTo(layerGroup);
           handleAddMarker(marker);
+          handleDistance(marker);
         }
       },
     });
     return null;
   }
+  useEffect(() => {
+    console.log(mapRef.current, expandMap);
+    if (mapRef.current) {
+      mapRef.current.invalidateSize();
+    }
+  }, [expandMap]);
+
   const mapRef = useRef();
 
   useEffect(() => {
@@ -106,13 +123,16 @@ const Map = ({
             }
 
             if (checkAnswer && markerStore) {
-              L.polyline(
-                [
-                  [currentPicture.LatLng.lat, currentPicture.LatLng.lng],
-                  [markerStore._latlng.lat, markerStore._latlng.lng],
-                ],
-                { color: "red" }
-              ).addTo(layerGroup);
+              console.log(
+                "polyline",
+                L.polyline(
+                  [
+                    [currentPicture.LatLng.lat, currentPicture.LatLng.lng],
+                    [markerStore._latlng.lat, markerStore._latlng.lng],
+                  ],
+                  { color: "red" }
+                ).addTo(layerGroup)
+              );
             } else {
               null;
             }

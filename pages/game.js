@@ -42,15 +42,14 @@ export default function Game({
 }) {
   const [distanceRight, setDistanceRight] = useState();
   const { data: session } = useSession();
-
+  console.log(distance);
   function handleSubmit() {
-    if (distance < 500) {
+    if (distance < 1000) {
       setDistanceRight(1);
       handlePoints();
     } else if (distance === undefined) {
       setDistanceRight(3);
     } else {
-      handlePoints();
       setDistanceRight(2);
     }
   }
@@ -66,13 +65,18 @@ export default function Game({
           method: "PATCH",
           headers: { "content-type": "application/json" },
           body: JSON.stringify({
-            $inc: { points: 5 },
+            $inc: { points: Math.round(distance / 100) },
           }),
         });
         const data = await response.json();
         console.log("data", data);
       },
-      { optimisticData: { ...user, points: user?.points + 5 } }
+      {
+        optimisticData: {
+          ...user,
+          points: user?.points + Math.round(distance / 100),
+        },
+      }
     );
   }
 
@@ -164,13 +168,15 @@ export default function Game({
       {distanceRight === 1 ? (
         <>
           <Alert className={styles.alertBox} severity="success">
-            You are Right!
+            You are {Math.round(distance)} meter away! You got{" "}
+            {Math.round(distance / 100)} Points
           </Alert>
         </>
       ) : distanceRight === 2 ? (
         <>
           <Alert className={styles.alertBox} severity="error">
-            Sorry! You are not in range
+            Sorry! You are {Math.round(distance)} meter away, not in range for
+            points
           </Alert>
         </>
       ) : distanceRight === 3 ? (
