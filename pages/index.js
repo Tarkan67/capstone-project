@@ -18,8 +18,8 @@ export default function Home() {
   }, []);
 
   return (
-    <Link href="/game" className={styles.mainGridContainer}>
-      <div className={styles.mainGridContainer}>
+    <Link href="/game">
+      <div className={styles.indexFlexContainer}>
         <LoginButton />
         <Head>
           <title>Elden Guesser</title>

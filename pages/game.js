@@ -9,10 +9,18 @@ import randomInteger from "random-int";
 import LoginButton from "../components/LoginButton/LoginButton";
 import { getSession, useSession } from "next-auth/react";
 import Button from "@mui/material/Button";
-import { Alert, AlertTitle, ButtonGroup, Tooltip } from "@mui/material";
+import {
+  Alert,
+  AlertTitle,
+  ButtonGroup,
+  Collapse,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
 import PointsDisplay from "../components/PointsDisplay/PointsDisplay";
 import useSWR from "swr";
 import LeaderBoardButton from "../components/LeaderBoardButton/LeaderBoardButton";
+import { Box } from "@mui/system";
 
 const MapEffect = ({ useMap }) => {
   const map = useMap();
@@ -41,16 +49,18 @@ export default function Game({
   setExpandMap,
 }) {
   const [distanceRight, setDistanceRight] = useState();
+  const [open, setOpen] = useState(true);
   const { data: session } = useSession();
+  console.log(distance);
 
   function handleSubmit() {
-    if (distance < 500) {
+    if (distance < 1000) {
       setDistanceRight(1);
       handlePoints();
     } else if (distance === undefined) {
       setDistanceRight(3);
+      setOpen(true);
     } else {
-      handlePoints();
       setDistanceRight(2);
     }
   }
@@ -66,13 +76,18 @@ export default function Game({
           method: "PATCH",
           headers: { "content-type": "application/json" },
           body: JSON.stringify({
-            $inc: { points: 5 },
+            $inc: { points: Math.round(distance / 100) },
           }),
         });
         const data = await response.json();
         console.log("data", data);
       },
-      { optimisticData: { ...user, points: user?.points + 5 } }
+      {
+        optimisticData: {
+          ...user,
+          points: user?.points + Math.round(distance / 100),
+        },
+      }
     );
   }
 
@@ -105,7 +120,7 @@ export default function Game({
         </div>
       </div>
       <div className={styles.mainFlexContainerSecond}>
-        {distanceRight ? (
+        {distanceRight == 1 || distanceRight == 2 ? (
           <>
             <ButtonGroup
               className={styles.buttonGroup}
@@ -164,22 +179,40 @@ export default function Game({
       {distanceRight === 1 ? (
         <>
           <Alert className={styles.alertBox} severity="success">
-            You are Right!
+            You are {Math.round(distance)} meter away! You got{" "}
+            {Math.round(distance / 100)} Points
           </Alert>
         </>
       ) : distanceRight === 2 ? (
         <>
           <Alert className={styles.alertBox} severity="error">
-            Sorry! You are not in range
+            Sorry! You are {Math.round(distance)} meter away, not in range for
+            points
           </Alert>
         </>
       ) : distanceRight === 3 ? (
         <>
-          <AlertTitle>
-            <Alert className={styles.alertBox} severity="info">
-              Set a Marker on the map before you Submit
+          <Collapse in={open}>
+            <Alert
+              severity="info"
+              className={styles.alertBox}
+              action={
+                <IconButton
+                  aria-label="close"
+                  color="inherit"
+                  size="small"
+                  onClick={() => {
+                    setOpen(false);
+                  }}
+                >
+                  X
+                </IconButton>
+              }
+              sx={{ mb: 2 }}
+            >
+              Close me!
             </Alert>
-          </AlertTitle>
+          </Collapse>
         </>
       ) : null}
 

@@ -33,7 +33,6 @@
 }
 .mainFlexContainer {
   display: flex;
-  height: 100%;
   width: 100%;
   padding: 10px;
   z-index: 10;
@@ -51,4 +50,14 @@
 .LeaderBoardButtonFlexContainer {
   display: flex;
   gap: 10px;
+}
+.indexFlexContainer {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  z-index: 10;
+  justify-content: space-between;
+}
+.indexLoginButton {
+  width: 100%;
 }
