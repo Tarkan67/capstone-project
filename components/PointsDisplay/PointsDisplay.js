@@ -12,7 +12,7 @@ export default function PointsDisplay() {
 
   if (session) {
     <Button variant="contained" className={styles.PointsDisplay}>
-      {user ? user.points : "no logged in"}
+      {user ? user.points : "not logged in"}
     </Button>;
   }
   return (
