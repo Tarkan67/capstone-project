@@ -9,6 +9,21 @@
 .button {
   font-size: 1em;
 }
+.pinButton {
+  position: absolute;
+  right: 72vw;
+  bottom: 83vh;
+  width: 3vw;
+  height: 3vh;
+  z-index: 15;
+  background-color: #a3884b;
+  color: whitesmoke;
+  border-radius: 6px 6px 0px 0px;
+}
+.clickedPinButton {
+  background-color: #81672a;
+}
+
 .alertBox {
   position: fixed;
   top: 50vh;

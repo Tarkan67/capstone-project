@@ -23,6 +23,8 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
       },
     },
   });
+  const [animation, setAnimation] = useState(false);
+  const [pinned, setPinned] = useState(false);
   const [expandMap, setExpandMap] = useState(false);
   const [clickCount, setClickCount] = useState(0);
   const [latLng, setLatLng] = useState();
@@ -48,6 +50,10 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
           >
             <Component
               {...pageProps}
+              animation={animation}
+              setAnimation={setAnimation}
+              pinned={pinned}
+              setPinned={setPinned}
               expandMap={expandMap}
               setExpandMap={setExpandMap}
               clickCount={clickCount}

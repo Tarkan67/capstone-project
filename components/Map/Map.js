@@ -34,6 +34,10 @@ const Map = ({
   setLayerGroup,
   expandMap,
   setExpandMap,
+  pinned,
+  setPinned,
+  animation,
+  setAnimation,
   ...rest
 }) => {
   // Fix for issue between next js and react leaflet, without it no markers will show up on the map
@@ -50,7 +54,24 @@ const Map = ({
   }, []);
 
   function MyComponent() {
+    function expandMapHandler() {
+      setExpandMap(false);
+    }
+    function animationHandlerTrue() {
+      setAnimation(true);
+    }
+    function animationHandlerFalse() {
+      setAnimation(false);
+    }
     const map = ReactLeaflet.useMapEvents({
+      mouseover: (e) => {
+        setExpandMap(true);
+        setTimeout(animationHandlerTrue, 1001);
+      },
+      mouseout: (e) => {
+        setTimeout(animationHandlerFalse, 1001);
+        setTimeout(expandMapHandler, 1000);
+      },
       click: (e) => {
         function handleAddMarker(marker) {
           setMarkerStore(marker);
@@ -85,11 +106,6 @@ const Map = ({
     });
     return null;
   }
-  useEffect(() => {
-    if (mapRef.current) {
-      mapRef.current.invalidateSize();
-    }
-  }, [expandMap]);
 
   const mapRef = useRef();
 
@@ -97,10 +113,12 @@ const Map = ({
     if (mapRef.current) {
       mapRef.current.invalidateSize();
     }
-  }, [expandMap]);
+  }, [animation]);
 
   return (
-    <div className={cx(styles.map, { [styles.mapExpanded]: expandMap })}>
+    <div
+      className={cx(styles.map, { [styles.mapExpanded]: expandMap || pinned })}
+    >
       <MapContainer
         className={styles.mapContainer}
         {...rest}
