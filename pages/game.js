@@ -1,7 +1,8 @@
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Map from "../components/Map";
+import { motion } from "framer-motion";
 
 import styles from "../styles/Home.module.css";
 import locations from "../db/location";
@@ -109,6 +110,8 @@ export default function Game({
   function handleExpandMap() {
     setExpandMap(!expandMap);
   }
+
+  const constraintsRef = useRef(null);
 
   return (
     <>
@@ -219,17 +222,21 @@ export default function Game({
       <Head>
         <title>Elden Guesser</title>
       </Head>
-      <div className={styles.imageContainer}>
-        <Image
-          src={
-            currentPicture
-              ? currentPicture.path
-              : locations[randomInteger(4)].path
-          }
-          alt="First Picture"
-          layout="fill"
-          className={styles.image}
-        />
+      <div className={styles.imageContainer} ref={constraintsRef}>
+        <motion.div drag="x" dragConstraints={constraintsRef} dragElastic={0.1}>
+          <div className={styles.imageWrapper}>
+            <Image
+              src={
+                "https://res.cloudinary.com/dbqtg5phf/image/upload/v1650309090/Location_2-fixed_u8icb9.jpg"
+              }
+              alt="First Picture"
+              layout="fill"
+              objectFit="cover"
+              draggable="false"
+              className={styles.image}
+            />
+          </div>
+        </motion.div>
       </div>
       <div>
         <Map
