@@ -4,7 +4,7 @@ import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
 import styles from "./LeaderBoardButton.module.css";
 import LeaderBoard from "../LeaderBoard/LeaderBoard";
 
-export default function LeaderBoardButton() {
+export default function LeaderBoardButton({ page, handleCloseNavMenu }) {
   const { data: session } = useSession();
   if (session) {
     return (
@@ -12,11 +12,12 @@ export default function LeaderBoardButton() {
         {(popupState) => (
           <>
             <Button
-              variant="contained"
-              className={styles.LeaderBoardButton}
+              key={page}
+              onClick={handleCloseNavMenu}
               {...bindTrigger(popupState)}
+              sx={{ my: 2, color: "white", display: "block" }}
             >
-              Ranking
+              {page}
             </Button>
             <Popover
               {...bindPopover(popupState)}

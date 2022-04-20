@@ -4,7 +4,7 @@ import Image from "next/image";
 import Map from "../components/Map";
 import { motion } from "framer-motion";
 
-import styles from "../styles/Home.module.css";
+import styles from "../styles/Game.module.css";
 import locations from "../db/level_2";
 import LoginButton from "../components/LoginButton/LoginButton";
 import { getSession, useSession } from "next-auth/react";

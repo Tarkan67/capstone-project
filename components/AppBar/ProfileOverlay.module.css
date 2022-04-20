@@ -1,0 +1,17 @@
+.ProfileButton {
+  z-index: 10;
+  justify-content: flex-start;
+}
+.Avatar {
+  width: 15%;
+  height: 15%;
+  left: 1vw;
+  top: 1vh;
+}
+
+.SignOutButton {
+  width: 25%;
+  height: 15%;
+  left: 38%;
+  bottom: 10px;
+}
