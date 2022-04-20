@@ -26,8 +26,8 @@
 
 .alertBox {
   position: fixed;
-  top: 50vh;
-  right: 45vw;
+  top: 11.2vh;
+  right: 41.5vw;
   z-index: 16;
 }
 .imageContainer {

@@ -1,7 +1,6 @@
-import { Avatar, Button, Popover, Typography } from "@mui/material";
-import { useSession, signOut } from "next-auth/react";
+import { Button, Popover } from "@mui/material";
+import { useSession } from "next-auth/react";
 import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
-import styles from "./LeaderBoardButton.module.css";
 import LeaderBoard from "../LeaderBoard/LeaderBoard";
 
 export default function LeaderBoardButton({ page, handleCloseNavMenu }) {

@@ -21,6 +21,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
       },
     },
   });
+  const [distanceRight, setDistanceRight] = useState();
   const [reload, setReload] = useState(false);
   const [submitCount, setSubmitCount] = useState(0);
   const [animation, setAnimation] = useState(false);
@@ -47,6 +48,8 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
           >
             <Component
               {...pageProps}
+              distanceRight={distanceRight}
+              setDistanceRight={setDistanceRight}
               reload={reload}
               setReload={setReload}
               submitCount={submitCount}

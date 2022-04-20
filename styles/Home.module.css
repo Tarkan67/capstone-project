@@ -4,3 +4,8 @@
   width: 100vw;
   height: 100vh;
 }
+.flexCardContainer {
+  padding-top: 5vh;
+  display: flex;
+  justify-content: space-around;
+}

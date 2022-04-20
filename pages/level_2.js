@@ -6,7 +6,6 @@ import { motion } from "framer-motion";
 
 import styles from "../styles/Game.module.css";
 import locations from "../db/level_2";
-import LoginButton from "../components/LoginButton/LoginButton";
 import { getSession, useSession } from "next-auth/react";
 import Button from "@mui/material/Button";
 import {
@@ -18,7 +17,6 @@ import {
 } from "@mui/material";
 import PointsDisplay from "../components/PointsDisplay/PointsDisplay";
 import useSWR from "swr";
-import LeaderBoardButton from "../components/LeaderBoardButton/LeaderBoardButton";
 import { cx } from "@emotion/css";
 import { useRouter } from "next/router";
 
@@ -55,8 +53,9 @@ export default function Game({
   setAnimation,
   reload,
   setReload,
+  distanceRight,
+  setDistanceRight,
 }) {
-  const [distanceRight, setDistanceRight] = useState();
   const [open, setOpen] = useState(true);
   const { data: session } = useSession();
   console.log(distance);
@@ -84,7 +83,9 @@ export default function Game({
           method: "PATCH",
           headers: { "content-type": "application/json" },
           body: JSON.stringify({
-            $inc: { points: Math.round(distance / 100) },
+            $inc: {
+              points: Math.round(1000 * (1 / (distance ^ 0.9))),
+            },
           }),
         });
         const data = await response.json();
@@ -93,7 +94,7 @@ export default function Game({
       {
         optimisticData: {
           ...user,
-          points: user?.points + Math.round(distance / 100),
+          points: user?.points + Math.round(1000 * (1 / (distance ^ 0.9))),
         },
       }
     );
@@ -148,9 +149,7 @@ export default function Game({
   return (
     <>
       <div className={styles.mainFlexContainer}>
-        <LoginButton />
         <div className={styles.LeaderBoardButtonFlexContainer}>
-          <LeaderBoardButton />
           <PointsDisplay currentPicture={currentPicture} />
         </div>
       </div>
@@ -206,7 +205,7 @@ export default function Game({
         <>
           <Alert className={styles.alertBox} severity="success">
             You are {Math.round(distance)} meter away! You got{" "}
-            {Math.round(distance / 100)} Points
+            {Math.round(1000 * (1 / (distance ^ 0.9)))} Points
           </Alert>
         </>
       ) : distanceRight === 2 ? (
@@ -236,7 +235,7 @@ export default function Game({
               }
               sx={{ mb: 2 }}
             >
-              Close me!
+              Set a marker, before submitting!
             </Alert>
           </Collapse>
         </>
@@ -274,6 +273,8 @@ export default function Game({
       ) : null}
       <div>
         <Map
+          distanceRight={distanceRight}
+          setDistanceRight={setDistanceRight}
           reload={reload}
           setReload={setReload}
           submitCount={submitCount}
