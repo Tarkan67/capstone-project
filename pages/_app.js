@@ -1,8 +1,6 @@
 import { SessionProvider } from "next-auth/react";
-import randomInteger from "random-int";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { SWRConfig } from "swr";
-import locations from "../db/location";
 import "../styles/globals.css";
 import { createTheme } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
@@ -23,6 +21,8 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
       },
     },
   });
+  const [reload, setReload] = useState(false);
+  const [submitCount, setSubmitCount] = useState(0);
   const [animation, setAnimation] = useState(false);
   const [pinned, setPinned] = useState(false);
   const [expandMap, setExpandMap] = useState(false);
@@ -34,9 +34,6 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   const [markerStore, setMarkerStore] = useState();
   const [clearMap, setClearMap] = useState(false);
   const [checkAnswer, setCheckAnswer] = useState(false);
-  useEffect(() => {
-    setCurrentPicture(locations[randomInteger(4)]);
-  }, []);
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -50,6 +47,10 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
           >
             <Component
               {...pageProps}
+              reload={reload}
+              setReload={setReload}
+              submitCount={submitCount}
+              setSubmitCount={setSubmitCount}
               animation={animation}
               setAnimation={setAnimation}
               pinned={pinned}

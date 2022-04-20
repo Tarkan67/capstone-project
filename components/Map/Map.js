@@ -80,12 +80,14 @@ const Map = ({
           setClickCount(clickCount);
         }
         function handleDistance(marker) {
-          setDistance(
-            map.distance(
-              [marker._latlng.lat, marker._latlng.lng],
-              [currentPicture.LatLng.lat, currentPicture.LatLng.lng]
-            ) / 1000
-          );
+          currentPicture
+            ? setDistance(
+                map.distance(
+                  [marker._latlng.lat, marker._latlng.lng],
+                  [currentPicture.LatLng.lat, currentPicture.LatLng.lng]
+                ) / 1000
+              )
+            : null;
         }
         setLatLng(e.latlng);
         const { lat, lng } = e.latlng;
@@ -134,7 +136,7 @@ const Map = ({
               handleLayerGroup();
             }
 
-            if (checkAnswer && markerStore) {
+            if (checkAnswer && markerStore && currentPicture) {
               "polyline",
                 L.polyline(
                   [

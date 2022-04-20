@@ -5,14 +5,12 @@ import Map from "../components/Map";
 import { motion } from "framer-motion";
 
 import styles from "../styles/Home.module.css";
-import locations from "../db/location";
-import randomInteger from "random-int";
+import locations from "../db/level_2";
 import LoginButton from "../components/LoginButton/LoginButton";
 import { getSession, useSession } from "next-auth/react";
 import Button from "@mui/material/Button";
 import {
   Alert,
-  AlertTitle,
   ButtonGroup,
   Collapse,
   IconButton,
@@ -21,8 +19,8 @@ import {
 import PointsDisplay from "../components/PointsDisplay/PointsDisplay";
 import useSWR from "swr";
 import LeaderBoardButton from "../components/LeaderBoardButton/LeaderBoardButton";
-import { Box } from "@mui/system";
 import { cx } from "@emotion/css";
+import { useRouter } from "next/router";
 
 const MapEffect = ({ useMap }) => {
   const map = useMap();
@@ -31,6 +29,8 @@ const MapEffect = ({ useMap }) => {
   return null;
 };
 export default function Game({
+  submitCount,
+  setSubmitCount,
   currentPicture,
   setCurrentPicture,
   distance,
@@ -53,6 +53,8 @@ export default function Game({
   setPinned,
   animation,
   setAnimation,
+  reload,
+  setReload,
 }) {
   const [distanceRight, setDistanceRight] = useState();
   const [open, setOpen] = useState(true);
@@ -97,12 +99,37 @@ export default function Game({
     );
   }
 
+  const router = useRouter();
+
+  function reloadPage() {
+    setReload(false);
+  }
+
+  function routerLandingPage() {
+    router.push("/");
+  }
+
   function handleNextPicture() {
+    if (currentPicture.id === 5) {
+      routerLandingPage();
+    }
     setDistanceRight(undefined);
-    setCurrentPicture(locations[randomInteger(4)]);
+    setSubmitCount(submitCount + 1);
+    console.log("currentPicture", currentPicture.id);
     setClearMap(true);
     setExpandMap(false);
   }
+  useEffect(() => {
+    setCurrentPicture(locations[submitCount]);
+  }, [submitCount]);
+
+  useEffect(() => {
+    setCurrentPicture(locations[submitCount]);
+    if (reload) {
+      reloadPage();
+      router.reload();
+    }
+  }, []);
 
   function handleCheckAnswer() {
     if (markerStore) {
@@ -112,9 +139,6 @@ export default function Game({
     }
   }
 
-  function handleExpandMap() {
-    setExpandMap(!expandMap);
-  }
   function handlePinButton() {
     setPinned(!pinned);
   }
@@ -127,7 +151,7 @@ export default function Game({
         <LoginButton />
         <div className={styles.LeaderBoardButtonFlexContainer}>
           <LeaderBoardButton />
-          <PointsDisplay />
+          <PointsDisplay currentPicture={currentPicture} />
         </div>
       </div>
       <div className={styles.mainFlexContainerSecond}>
@@ -224,17 +248,17 @@ export default function Game({
       <div className={styles.imageContainer} ref={constraintsRef}>
         <motion.div drag="x" dragConstraints={constraintsRef} dragElastic={0.1}>
           <div className={styles.imageWrapper}>
-            <Image
-              onClick={() => setExpandMap(false)}
-              src={
-                "https://res.cloudinary.com/dbqtg5phf/image/upload/v1650309090/Location_2-fixed_u8icb9.jpg"
-              }
-              alt="First Picture"
-              layout="fill"
-              objectFit="cover"
-              draggable="false"
-              className={styles.image}
-            />
+            {currentPicture ? (
+              <Image
+                onClick={() => setExpandMap(false)}
+                src={currentPicture.path}
+                alt="First Picture"
+                layout="fill"
+                objectFit="cover"
+                draggable="false"
+                className={styles.image}
+              />
+            ) : null}
           </div>
         </motion.div>
       </div>
@@ -250,6 +274,10 @@ export default function Game({
       ) : null}
       <div>
         <Map
+          reload={reload}
+          setReload={setReload}
+          submitCount={submitCount}
+          setSubmitCount={setSubmitCount}
           animation={animation}
           setAnimation={setAnimation}
           pinned={pinned}

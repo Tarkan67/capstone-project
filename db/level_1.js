@@ -1,4 +1,4 @@
-const locations = [
+const location = [
   {
     id: 1,
     path: "/images/location1.jpeg",
@@ -25,4 +25,4 @@ const locations = [
     LatLng: { lat: 12.099584727650399, lng: -100.32045364379883 },
   },
 ];
-export default locations;
+export default location;

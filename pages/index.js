@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 
-export default function Home() {
+export default function Home({ setSubmitCount, setReload }) {
   const router = useRouter();
   useEffect(() => {
     function handleKeyPress() {
@@ -17,8 +17,12 @@ export default function Home() {
     };
   }, []);
 
+  useEffect(() => {
+    setReload(true);
+    setSubmitCount(0);
+  }, []);
   return (
-    <Link href="/game">
+    <Link href="/level_1">
       <div className={styles.indexFlexContainer}>
         <LoginButton />
         <Head>
