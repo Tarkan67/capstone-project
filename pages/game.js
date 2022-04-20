@@ -1,7 +1,8 @@
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Map from "../components/Map";
+import { motion } from "framer-motion";
 
 import styles from "../styles/Home.module.css";
 import locations from "../db/location";
@@ -21,6 +22,7 @@ import PointsDisplay from "../components/PointsDisplay/PointsDisplay";
 import useSWR from "swr";
 import LeaderBoardButton from "../components/LeaderBoardButton/LeaderBoardButton";
 import { Box } from "@mui/system";
+import { cx } from "@emotion/css";
 
 const MapEffect = ({ useMap }) => {
   const map = useMap();
@@ -47,6 +49,10 @@ export default function Game({
   setLayerGroup,
   expandMap,
   setExpandMap,
+  pinned,
+  setPinned,
+  animation,
+  setAnimation,
 }) {
   const [distanceRight, setDistanceRight] = useState();
   const [open, setOpen] = useState(true);
@@ -109,6 +115,11 @@ export default function Game({
   function handleExpandMap() {
     setExpandMap(!expandMap);
   }
+  function handlePinButton() {
+    setPinned(!pinned);
+  }
+
+  const constraintsRef = useRef(null);
 
   return (
     <>
@@ -163,15 +174,6 @@ export default function Game({
                   Submit
                 </Button>
               </Tooltip>
-              <Tooltip title="Show Map">
-                <Button
-                  variant="contained"
-                  onClick={handleExpandMap}
-                  className={styles.button}
-                >
-                  Map
-                </Button>
-              </Tooltip>
             </ButtonGroup>
           </>
         )}
@@ -219,20 +221,39 @@ export default function Game({
       <Head>
         <title>Elden Guesser</title>
       </Head>
-      <div className={styles.imageContainer}>
-        <Image
-          src={
-            currentPicture
-              ? currentPicture.path
-              : locations[randomInteger(4)].path
-          }
-          alt="First Picture"
-          layout="fill"
-          className={styles.image}
-        />
+      <div className={styles.imageContainer} ref={constraintsRef}>
+        <motion.div drag="x" dragConstraints={constraintsRef} dragElastic={0.1}>
+          <div className={styles.imageWrapper}>
+            <Image
+              onClick={() => setExpandMap(false)}
+              src={
+                "https://res.cloudinary.com/dbqtg5phf/image/upload/v1650309090/Location_2-fixed_u8icb9.jpg"
+              }
+              alt="First Picture"
+              layout="fill"
+              objectFit="cover"
+              draggable="false"
+              className={styles.image}
+            />
+          </div>
+        </motion.div>
       </div>
+      {animation || pinned ? (
+        <button
+          className={cx(styles.pinButton, {
+            [styles.clickedPinButton]: pinned,
+          })}
+          onClick={handlePinButton}
+        >
+          Pin
+        </button>
+      ) : null}
       <div>
         <Map
+          animation={animation}
+          setAnimation={setAnimation}
+          pinned={pinned}
+          setPinned={setPinned}
           expandMap={expandMap}
           setExpandMap={setExpandMap}
           clickCount={clickCount}

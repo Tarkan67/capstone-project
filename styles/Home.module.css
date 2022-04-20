@@ -9,6 +9,21 @@
 .button {
   font-size: 1em;
 }
+.pinButton {
+  position: absolute;
+  right: 72vw;
+  bottom: 83vh;
+  width: 3vw;
+  height: 3vh;
+  z-index: 15;
+  background-color: #a3884b;
+  color: whitesmoke;
+  border-radius: 6px 6px 0px 0px;
+}
+.clickedPinButton {
+  background-color: #81672a;
+}
+
 .alertBox {
   position: fixed;
   top: 50vh;
@@ -16,13 +31,24 @@
   z-index: 16;
 }
 .imageContainer {
-  object-fit: cover;
+  top: 0;
+  left: 0;
+  position: absolute;
+  overflow: hidden;
   width: 100vw;
-  z-index: 1;
+  height: 100vh;
+  z-index: 2;
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  cursor: move;
 }
 .image {
-  object-fit: contain;
   z-index: 1;
+}
+.imageWrapper {
+  height: 100vh;
+  aspect-ratio: 6.94;
 }
 .video {
   object-fit: cover;
