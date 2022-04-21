@@ -58,7 +58,6 @@ export default function Game({
 }) {
   const [open, setOpen] = useState(true);
   const { data: session } = useSession();
-  console.log(distance);
 
   function handleSubmit() {
     if (distance < 1000) {
@@ -116,7 +115,6 @@ export default function Game({
     }
     setDistanceRight(undefined);
     setSubmitCount(submitCount + 1);
-    console.log("currentPicture", currentPicture.id);
     setClearMap(true);
     setExpandMap(false);
   }

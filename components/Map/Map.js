@@ -94,9 +94,7 @@ const Map = ({
         setLatLng(e.latlng);
         const { lat, lng } = e.latlng;
         if (distanceRight !== 2 && distanceRight !== 1) {
-          console.log("distanceRight", distanceRight);
           if (clickCount === 0 && !checkAnswer) {
-            console.log("distanceRight", distanceRight);
             handleClickCount(clickCount + 1);
             markerStore ? map.removeLayer(markerStore) : null;
             const marker = L.marker([lat, lng], { Icon }).addTo(layerGroup);

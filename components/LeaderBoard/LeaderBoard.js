@@ -12,15 +12,13 @@ import sortArray from "sort-array";
 
 export default function LeaderBoard() {
   const { data: allUser } = useSWR(`/api/user/`, {});
-  console.log("user", allUser);
+
   allUser
     ? sortArray(allUser, {
         by: "points",
         order: "desc",
       })
     : null;
-
-  console.log("sorted", allUser);
 
   return (
     <TableContainer component={Paper}>
