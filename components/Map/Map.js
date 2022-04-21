@@ -66,14 +66,18 @@ const Map = ({
       setAnimation(false);
     }
     const map = ReactLeaflet.useMapEvents({
+      dblclick: (e) => {
+        setExpandMap(true);
+        setTimeout(animationHandlerTrue, 1001);
+      },
       mouseover: (e) => {
         setExpandMap(true);
         setTimeout(animationHandlerTrue, 1001);
       },
-      mouseout: (e) => {
-        setTimeout(animationHandlerFalse, 1500);
-        setTimeout(expandMapHandler, 3000);
-      },
+      // mouseover: (e) => {
+      //   setTimeout(animationHandlerFalse, 1500);
+      //   setTimeout(expandMapHandler, 3000);
+      // },
       click: (e) => {
         function handleAddMarker(marker) {
           setMarkerStore(marker);

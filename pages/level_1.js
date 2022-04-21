@@ -3,10 +3,9 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Map from "../components/Map";
 import { motion } from "framer-motion";
-
+import PushPinIcon from "@mui/icons-material/PushPin";
 import styles from "../styles/Game.module.css";
 import locations from "../db/level_1";
-import LoginButton from "../components/LoginButton/LoginButton";
 import { getSession, useSession } from "next-auth/react";
 import Button from "@mui/material/Button";
 import {
@@ -21,6 +20,7 @@ import useSWR from "swr";
 import LeaderBoardButton from "../components/LeaderBoardButton/LeaderBoardButton";
 import { cx } from "@emotion/css";
 import { useRouter } from "next/router";
+import PushPinOutlinedIcon from "@mui/icons-material/PushPinOutlined";
 
 const MapEffect = ({ useMap }) => {
   const map = useMap();
@@ -117,6 +117,7 @@ export default function Game({
     setSubmitCount(submitCount + 1);
     setClearMap(true);
     setExpandMap(false);
+    setAnimation(false);
   }
   useEffect(() => {
     setCurrentPicture(locations[submitCount]);
@@ -140,6 +141,11 @@ export default function Game({
 
   function handlePinButton() {
     setPinned(!pinned);
+  }
+
+  function handleImageClick() {
+    setExpandMap(false);
+    setAnimation(false);
   }
 
   const constraintsRef = useRef(null);
@@ -202,14 +208,14 @@ export default function Game({
       {distanceRight === 1 ? (
         <>
           <Alert className={styles.alertBox} severity="success">
-            You are {Math.round(distance)} meter away! You got{" "}
+            You are {Math.round(distance)} meters away! You got{" "}
             {Math.round(1000 * (1 / (distance ^ 0.9)))} Points
           </Alert>
         </>
       ) : distanceRight === 2 ? (
         <>
           <Alert className={styles.alertBox} severity="error">
-            Sorry! You are {Math.round(distance)} meter away, not in range for
+            Sorry! You are {Math.round(distance)} meters away, not in range for
             points
           </Alert>
         </>
@@ -247,7 +253,7 @@ export default function Game({
           <div className={styles.imageWrapper}>
             {currentPicture ? (
               <Image
-                onClick={() => setExpandMap(false)}
+                onClick={handleImageClick}
                 src={currentPicture.path}
                 alt="First Picture"
                 layout="fill"
@@ -260,14 +266,14 @@ export default function Game({
         </motion.div>
       </div>
       {animation || pinned ? (
-        <button
-          className={cx(styles.pinButton, {
-            [styles.clickedPinButton]: pinned,
-          })}
-          onClick={handlePinButton}
-        >
-          Pin
-        </button>
+        pinned ? (
+          <PushPinIcon className={styles.pinButton} onClick={handlePinButton} />
+        ) : (
+          <PushPinOutlinedIcon
+            className={styles.pinButton}
+            onClick={handlePinButton}
+          />
+        )
       ) : null}
       <div>
         <Map

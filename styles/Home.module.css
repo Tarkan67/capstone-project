@@ -1,11 +1,11 @@
 .mainContainer {
-  background-color: #7d7a72;
   z-index: -1;
-  width: 100vw;
-  height: 100vh;
 }
 .flexCardContainer {
   padding-top: 5vh;
+  padding-left: 2vw;
+  padding-right: 2vw;
   display: flex;
   justify-content: space-around;
+  gap: 10px;
 }

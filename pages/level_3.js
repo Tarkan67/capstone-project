@@ -17,13 +17,12 @@ import {
 } from "@mui/material";
 import PointsDisplay from "../components/PointsDisplay/PointsDisplay";
 import useSWR from "swr";
+import LeaderBoardButton from "../components/LeaderBoardButton/LeaderBoardButton";
 import { cx } from "@emotion/css";
 import { useRouter } from "next/router";
 
 const MapEffect = ({ useMap }) => {
   const map = useMap();
-  useEffect(() => {}, [map]);
-
   return null;
 };
 export default function Game({
@@ -58,7 +57,6 @@ export default function Game({
 }) {
   const [open, setOpen] = useState(true);
   const { data: session } = useSession();
-  console.log(distance);
 
   function handleSubmit() {
     if (distance < 1000) {
@@ -116,9 +114,9 @@ export default function Game({
     }
     setDistanceRight(undefined);
     setSubmitCount(submitCount + 1);
-    console.log("currentPicture", currentPicture.id);
     setClearMap(true);
     setExpandMap(false);
+    setAnimation(false);
   }
   useEffect(() => {
     setCurrentPicture(locations[submitCount]);
@@ -142,6 +140,11 @@ export default function Game({
 
   function handlePinButton() {
     setPinned(!pinned);
+  }
+
+  function handleImageClick() {
+    setExpandMap(false);
+    setAnimation(false);
   }
 
   const constraintsRef = useRef(null);
@@ -249,7 +252,7 @@ export default function Game({
           <div className={styles.imageWrapper}>
             {currentPicture ? (
               <Image
-                onClick={() => setExpandMap(false)}
+                onClick={handleImageClick}
                 src={currentPicture.path}
                 alt="First Picture"
                 layout="fill"

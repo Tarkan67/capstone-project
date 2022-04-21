@@ -31,7 +31,24 @@ export default function Home({ setSubmitCount, setReload }) {
         />
         <ActionAreaCard
           path="/level_3"
-          title="LIURNIA OF THE LAKES"
+          title="LIURNIA"
+          imageSrc="https://res.cloudinary.com/dbqtg5phf/image/upload/v1650309090/Location_2-fixed_u8icb9.jpg"
+        />
+      </div>
+      <div className={styles.flexCardContainer}>
+        <ActionAreaCard
+          path="/level_3"
+          title="CAELID"
+          imageSrc="https://res.cloudinary.com/dbqtg5phf/image/upload/v1650309090/Location_2-fixed_u8icb9.jpg"
+        />
+        <ActionAreaCard
+          path="/level_3"
+          title="ALTUS PLATEAU"
+          imageSrc="https://res.cloudinary.com/dbqtg5phf/image/upload/v1650309090/Location_2-fixed_u8icb9.jpg"
+        />
+        <ActionAreaCard
+          path="/level_3"
+          title="MT. GELMIR"
           imageSrc="https://res.cloudinary.com/dbqtg5phf/image/upload/v1650309090/Location_2-fixed_u8icb9.jpg"
         />
       </div>
