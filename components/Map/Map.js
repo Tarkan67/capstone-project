@@ -38,6 +38,8 @@ const Map = ({
   setPinned,
   animation,
   setAnimation,
+  distanceRight,
+  setDistanceRight,
   ...rest
 }) => {
   // Fix for issue between next js and react leaflet, without it no markers will show up on the map
@@ -69,8 +71,8 @@ const Map = ({
         setTimeout(animationHandlerTrue, 1001);
       },
       mouseout: (e) => {
-        setTimeout(animationHandlerFalse, 1001);
-        setTimeout(expandMapHandler, 1000);
+        setTimeout(animationHandlerFalse, 1500);
+        setTimeout(expandMapHandler, 3000);
       },
       click: (e) => {
         function handleAddMarker(marker) {
@@ -80,27 +82,31 @@ const Map = ({
           setClickCount(clickCount);
         }
         function handleDistance(marker) {
-          setDistance(
-            map.distance(
-              [marker._latlng.lat, marker._latlng.lng],
-              [currentPicture.LatLng.lat, currentPicture.LatLng.lng]
-            ) / 1000
-          );
+          currentPicture
+            ? setDistance(
+                map.distance(
+                  [marker._latlng.lat, marker._latlng.lng],
+                  [currentPicture.LatLng.lat, currentPicture.LatLng.lng]
+                ) / 1000
+              )
+            : null;
         }
         setLatLng(e.latlng);
         const { lat, lng } = e.latlng;
-        if (clickCount === 0 && !checkAnswer) {
-          handleClickCount(clickCount + 1);
-          markerStore ? map.removeLayer(markerStore) : null;
-          const marker = L.marker([lat, lng], { Icon }).addTo(layerGroup);
-          handleAddMarker(marker);
-          handleDistance(marker);
-        } else if (clickCount === 1 && !checkAnswer) {
-          handleClickCount(clickCount - 1);
-          markerStore ? map.removeLayer(markerStore) : null;
-          const marker = L.marker([lat, lng], { Icon }).addTo(layerGroup);
-          handleAddMarker(marker);
-          handleDistance(marker);
+        if (distanceRight !== 2 && distanceRight !== 1) {
+          if (clickCount === 0 && !checkAnswer) {
+            handleClickCount(clickCount + 1);
+            markerStore ? map.removeLayer(markerStore) : null;
+            const marker = L.marker([lat, lng], { Icon }).addTo(layerGroup);
+            handleAddMarker(marker);
+            handleDistance(marker);
+          } else if (clickCount === 1 && !checkAnswer) {
+            handleClickCount(clickCount - 1);
+            markerStore ? map.removeLayer(markerStore) : null;
+            const marker = L.marker([lat, lng], { Icon }).addTo(layerGroup);
+            handleAddMarker(marker);
+            handleDistance(marker);
+          }
         }
       },
     });
@@ -134,7 +140,7 @@ const Map = ({
               handleLayerGroup();
             }
 
-            if (checkAnswer && markerStore) {
+            if (checkAnswer && markerStore && currentPicture) {
               "polyline",
                 L.polyline(
                   [

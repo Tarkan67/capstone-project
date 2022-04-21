@@ -1,4 +1,4 @@
-import { Avatar, Button, Popover, Typography } from "@mui/material";
+import { Avatar, Button, IconButton, Popover, Typography } from "@mui/material";
 import { useSession, signOut } from "next-auth/react";
 import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
 import styles from "./ProfileOverlay.module.css";
@@ -10,13 +10,13 @@ export default function ProfileOverlay() {
       <PopupState variant="popover" popupId="demo-popup-popover">
         {(popupState) => (
           <>
-            <Button
-              variant="contained"
-              className={styles.ProfileButton}
-              {...bindTrigger(popupState)}
-            >
-              Profile
-            </Button>
+            <IconButton sx={{ p: 0 }}>
+              <Avatar
+                alt="Github-Profile-Image"
+                src={session.user.image}
+                {...bindTrigger(popupState)}
+              ></Avatar>
+            </IconButton>
             <Popover
               {...bindPopover(popupState)}
               anchorOrigin={{
