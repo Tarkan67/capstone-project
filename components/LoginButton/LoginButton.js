@@ -7,7 +7,7 @@ export default function LoginButton() {
   const { data: session } = useSession();
 
   if (session) {
-    return <ProfileOverlay></ProfileOverlay>;
+    return;
   }
   return (
     <Button
