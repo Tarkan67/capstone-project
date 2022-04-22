@@ -56,14 +56,8 @@ const Map = ({
   }, []);
 
   function MyComponent() {
-    function expandMapHandler() {
-      setExpandMap(false);
-    }
     function animationHandlerTrue() {
       setAnimation(true);
-    }
-    function animationHandlerFalse() {
-      setAnimation(false);
     }
     const map = ReactLeaflet.useMapEvents({
       dblclick: (e) => {
@@ -74,10 +68,6 @@ const Map = ({
         setExpandMap(true);
         setTimeout(animationHandlerTrue, 1001);
       },
-      // mouseover: (e) => {
-      //   setTimeout(animationHandlerFalse, 1500);
-      //   setTimeout(expandMapHandler, 3000);
-      // },
       click: (e) => {
         function handleAddMarker(marker) {
           setMarkerStore(marker);
@@ -104,12 +94,14 @@ const Map = ({
             const marker = L.marker([lat, lng], { Icon }).addTo(layerGroup);
             handleAddMarker(marker);
             handleDistance(marker);
+            console.log(marker._latlng);
           } else if (clickCount === 1 && !checkAnswer) {
             handleClickCount(clickCount - 1);
             markerStore ? map.removeLayer(markerStore) : null;
             const marker = L.marker([lat, lng], { Icon }).addTo(layerGroup);
             handleAddMarker(marker);
             handleDistance(marker);
+            console.log(marker._latlng);
           }
         }
       },
