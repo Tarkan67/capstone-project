@@ -94,14 +94,11 @@ const ResponsiveAppBar = () => {
             GeoGameGuesser
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <>
-                <LeaderBoardButton
-                  page={page}
-                  handleCloseNavMenu={handleCloseNavMenu}
-                />
-              </>
-            ))}
+            <LeaderBoardButton
+              key="leaderboard"
+              page="Leaderboard"
+              handleCloseNavMenu={handleCloseNavMenu}
+            />
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>

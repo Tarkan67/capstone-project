@@ -1,34 +1,46 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Welcome to the App GeoGameGuesser - Capstone Project
 
-## Getting Started
+### This is a capstone project for the web development bootcamp of [neuefische](https://www.neuefische.de/)
 
-First, run the development server:
+GeoGameGuesser challenges the player to guess their favorite locations in the award winning game Elden Ring
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+- Locations with a panorama view
+- interactive gamemap
+- Leaderboard with a point system
+- different playable levels
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## How to play
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+When you open [GeoGameGuesser](https://capstone-project-eight-brown.vercel.app/) you will start at the landingpage and see every playable level
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+There are several features in GeoGameGuesser:
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+### Landingpage
 
-## Learn More
+- By clicking on "leaderboard" on the navbar, you are presented with a leaderboard that shows every player
+- By clicking on the avatar, a popup will show user information and a logout button
+- Each card will lead to another playable level with 5 locations, after making 5 guesses the user will automatically return to the landingpage
 
-To learn more about Next.js, take a look at the following resources:
+### Level
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- In the level the user can submit their guesses and will be presented with an alert after each guess that show how much points he earned or not
+- there are 5 locations which are shown as a panorama background picture, the user can also navigate through the panorama by dragging
+- by double clicking the map it expends
+- by single clicking on the map the user will set a marker
+- after setting a marker the user can submit their answer
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+The Userdata is stored in the MongoDB along with their earned points
 
-## Deploy on Vercel
+The User can log in with GitHub
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Tech Stack
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- React
+- Next.js
+- Material UI
+- SWR
+- React Leaflet
+- Leaflet
+- mongoDB
+- mongoose
+- CSS3

@@ -56,23 +56,17 @@ const Map = ({
   }, []);
 
   function MyComponent() {
-    function expandMapHandler() {
-      setExpandMap(false);
-    }
     function animationHandlerTrue() {
       setAnimation(true);
     }
-    function animationHandlerFalse() {
-      setAnimation(false);
-    }
     const map = ReactLeaflet.useMapEvents({
-      mouseover: (e) => {
+      dblclick: (e) => {
         setExpandMap(true);
         setTimeout(animationHandlerTrue, 1001);
       },
-      mouseout: (e) => {
-        setTimeout(animationHandlerFalse, 1500);
-        setTimeout(expandMapHandler, 3000);
+      mouseover: (e) => {
+        setExpandMap(true);
+        setTimeout(animationHandlerTrue, 1001);
       },
       click: (e) => {
         function handleAddMarker(marker) {

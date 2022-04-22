@@ -2,6 +2,7 @@ import { Avatar, Button, IconButton, Popover, Typography } from "@mui/material";
 import { useSession, signOut } from "next-auth/react";
 import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
 import styles from "./ProfileOverlay.module.css";
+import LoginButton from "../LoginButton/LoginButton";
 
 export default function ProfileOverlay() {
   const { data: session } = useSession();
@@ -48,5 +49,9 @@ export default function ProfileOverlay() {
       </PopupState>
     );
   }
-  return <></>;
+  return (
+    <>
+      <LoginButton></LoginButton>
+    </>
+  );
 }
