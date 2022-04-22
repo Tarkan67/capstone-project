@@ -39,7 +39,6 @@ The User can log in with GitHub
 - Next.js
 - Material UI
 - SWR
-- Vercel
 - React Leaflet
 - Leaflet
 - mongoDB

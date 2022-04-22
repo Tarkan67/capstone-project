@@ -17,8 +17,6 @@ import {
 } from "@mui/material";
 import PointsDisplay from "../components/PointsDisplay/PointsDisplay";
 import useSWR from "swr";
-import LeaderBoardButton from "../components/LeaderBoardButton/LeaderBoardButton";
-import { cx } from "@emotion/css";
 import { useRouter } from "next/router";
 import PushPinOutlinedIcon from "@mui/icons-material/PushPinOutlined";
 

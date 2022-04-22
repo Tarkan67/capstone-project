@@ -94,14 +94,12 @@ const Map = ({
             const marker = L.marker([lat, lng], { Icon }).addTo(layerGroup);
             handleAddMarker(marker);
             handleDistance(marker);
-            console.log(marker._latlng);
           } else if (clickCount === 1 && !checkAnswer) {
             handleClickCount(clickCount - 1);
             markerStore ? map.removeLayer(markerStore) : null;
             const marker = L.marker([lat, lng], { Icon }).addTo(layerGroup);
             handleAddMarker(marker);
             handleDistance(marker);
-            console.log(marker._latlng);
           }
         }
       },
