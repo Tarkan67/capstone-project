@@ -43,4 +43,3 @@ The User can log in with GitHub
 - Leaflet
 - mongoDB
 - mongoose
-- CSS3
